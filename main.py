@@ -1,1 +1,1 @@
-print('ok')
+print('new print')
