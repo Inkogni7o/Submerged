@@ -2,4 +2,5 @@ import pygame.sprite
 
 
 class MainPlayer(pygame.sprite.Sprite):
-    pass
+    def __init__(self):
+        super(MainPlayer, self).__init__()
