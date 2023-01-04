@@ -7,6 +7,6 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        screen.fill((0, 0, 0))
+        screen.fill((255, 255, 255))
         pygame.display.flip()
         clock.tick(60)
