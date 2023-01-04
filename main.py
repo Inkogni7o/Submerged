@@ -10,5 +10,5 @@ screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 
 
-while True:
-    main_game(screen, clock)
+
+main_game(screen, clock)
