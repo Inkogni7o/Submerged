@@ -19,18 +19,26 @@ class Button:
         self.x, self.y = x, y
         self.width, self.height = width, height
 
-    def draw(self, screen: pygame.display, pos_x: int, pos_y: int, outline=None):
-        if outline:
+    def draw(self, screen: pygame.display, pos_x: int, pos_y: int, outline_color=None):
+        if outline_color:
             # отрисовка границы кнопки, если таковая имеется
-            pygame.draw.rect(screen, outline, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
+            pygame.draw.rect(screen, outline_color, (self.x - 2, self.y - 2, self.width + 4, self.height + 4), 0)
 
-        if self.x <= pos_x <= self.x + self.width and self.y <= pos_y <= self.y + self.height:
+        if self.mouse_on_btn(pos_x, pos_y):
             pygame.draw.rect(screen, self.color2, (self.x, self.y, self.width, self.height), 0)
         else:
             pygame.draw.rect(screen, self.color1, (self.x, self.y, self.width, self.height), 0)
 
         font = pygame.font.SysFont('comicsans', 60)
         text = font.render(self.text_btn, True, (0, 0, 0))
-        screen.blit(text,
-                    (self.x + (self.width / 2 - text.get_width() / 2),
-                     self.y + (self.height / 2 - text.get_height() / 2)))
+        if self.mouse_on_btn(pos_x, pos_y):
+            screen.blit(text, (self.x + (self.width / 2 - text.get_width() / 2),
+                               self.y + (self.height / 2 - text.get_height() / 2) + 5))
+        else:
+            screen.blit(text, (self.x + (self.width / 2 - text.get_width() / 2),
+                               self.y + (self.height / 2 - text.get_height() / 2)))
+
+    def mouse_on_btn(self, pos_x: int, pos_y: int) -> bool:
+        if self.x <= pos_x <= self.x + self.width and self.y <= pos_y <= self.y + self.height:
+            return True
+        return False
