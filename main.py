@@ -2,7 +2,8 @@ import pygame
 
 from game import main_game
 from menu import introductory_menu
-from settings import get_monitor_size, SIZE
+from settings import settings_screen
+from config import get_monitor_size, SIZE
 
 pygame.init()
 get_monitor_size()
@@ -17,5 +18,8 @@ while True:
             now_screen = 'level1'
         else:
             now_screen = 'settings'
+    if now_screen == 'settings':
+        if settings_screen(screen, clock):
+            now_screen = 'start'
     if now_screen == 'level1':
         main_game(screen, clock)

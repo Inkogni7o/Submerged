@@ -1,4 +1,5 @@
 import pygame
+from sys import exit
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
