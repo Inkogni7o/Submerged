@@ -6,9 +6,8 @@ from settings import settings_screen
 from config import get_monitor_size
 
 pygame.init()
-SIZE = get_monitor_size()
 
-screen = pygame.display.set_mode(SIZE)
+screen = pygame.display.set_mode(get_monitor_size())
 clock = pygame.time.Clock()
 
 now_screen = 'start'
