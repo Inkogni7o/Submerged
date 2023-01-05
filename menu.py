@@ -28,3 +28,4 @@ def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):
             button.draw(screen, *pygame.mouse.get_pos())
         pygame.display.flip()
         clock.tick(60)
+        print('ok')
