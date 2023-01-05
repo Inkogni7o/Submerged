@@ -14,10 +14,7 @@ clock = pygame.time.Clock()
 now_screen = 'start'
 while True:
     if now_screen == 'start':
-        if introductory_menu(screen, clock):
-            now_screen = 'level1'
-        else:
-            now_screen = 'settings'
+        now_screen = 'level1' if introductory_menu(screen, clock) else 'settings'
     if now_screen == 'settings':
         if settings_screen(screen, clock):
             now_screen = 'start'

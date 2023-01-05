@@ -11,6 +11,9 @@ def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in buttons:
                     if button.mouse_on_btn(*pygame.mouse.get_pos()):
