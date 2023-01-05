@@ -2,20 +2,19 @@ import pygame
 
 
 class Button:
-    def __init__(self, text: str, color1: str, color2: str,
+    def __init__(self, text: str, color1: tuple, color2: tuple,
                  x: int, y: int, width: int, height: int):
         """
         Класс кнопки на экране
         :param text: текст внутри кнопки
-        :param color1: цвет, задающийся словом (напр. yellow), ryj
+        :param color1: цвет в виде кортежа RGB
         :param x: X координата вернего левого края кнопки
         :param y: Y координата вернего левого края кнопки
         :param width: ширина кнопки в пикселях
         :param height: высота кнопки в пикселях
         """
         self.text_btn = text
-        self.color1 = pygame.Color(color1)
-        self.color2 = pygame.Color(color2)
+        self.color1, self.color2 = color1, color2
         self.x, self.y = x, y
         self.width, self.height = width, height
 

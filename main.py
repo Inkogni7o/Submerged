@@ -3,10 +3,10 @@ import pygame
 from game import main_game
 from menu import introductory_menu
 from settings import settings_screen
-from config import get_monitor_size, SIZE
+from config import get_monitor_size
 
 pygame.init()
-get_monitor_size()
+SIZE = get_monitor_size()
 
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
