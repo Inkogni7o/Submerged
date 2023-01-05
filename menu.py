@@ -5,10 +5,9 @@ from buttons import Button
 
 
 def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):
-    buttons = list()
-    buttons.append(Button('Начать игру!', 'green', 'red', 1450, 700, 400, 100))
-    buttons.append(Button('Настройки', 'green', 'red', 1450, 850, 400, 100))
-    buttons.append(Button('Выйти', 'green', 'red', 1450, 1000, 400, 100))
+    buttons = [Button('Начать игру!', 'green', 'red', 1450, 700, 400, 100),
+               Button('Настройки', 'green', 'red', 1450, 850, 400, 100),
+               Button('Выйти', 'green', 'red', 1450, 1000, 400, 100)]
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -20,6 +19,8 @@ def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):
                             exit()
                         if button.text_btn == 'Начать игру!':
                             return True
+                        if button.text_btn == 'Настройки':
+                            return False
         for button in buttons:
             button.draw(screen, *pygame.mouse.get_pos())
         pygame.display.flip()
