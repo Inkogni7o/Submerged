@@ -4,7 +4,8 @@ from main_player import MainPlayer
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
-    player = MainPlayer(50, 50)
+    player = MainPlayer()
+
     player_group = pygame.sprite.Group()
     player_group.add(player)
     while True:
@@ -13,6 +14,8 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+        player.update_pos(pygame.key)
+        player.update_spr()
         player_group.draw(screen)
         pygame.display.flip()
         clock.tick(60)
