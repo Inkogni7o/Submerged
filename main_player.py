@@ -28,7 +28,7 @@ class MainPlayer(pygame.sprite.Sprite):
             self.image5,
             self.image6,
         ]
-        self.speed = 4
+        self.speed = 8
         self.cur_sprite = 0
 
     def update_pos(self, key):
