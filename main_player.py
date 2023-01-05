@@ -32,13 +32,13 @@ class MainPlayer(pygame.sprite.Sprite):
         self.cur_sprite = 0
 
     def update_pos(self, key):
-        if key.get_pressed()[K_LEFT]:
+        if key.get_pressed()[K_LEFT] or key.get_pressed()[K_a]:
             self.rect.x -= self.speed
-        if key.get_pressed()[K_RIGHT]:
+        if key.get_pressed()[K_RIGHT] or key.get_pressed()[K_d]:
             self.rect.x += self.speed
-        if key.get_pressed()[K_UP]:
+        if key.get_pressed()[K_UP] or key.get_pressed()[K_w]:
             self.rect.y -= self.speed
-        if key.get_pressed()[K_DOWN]:
+        if key.get_pressed()[K_DOWN] or key.get_pressed()[K_s]:
             self.rect.y += self.speed
         pygame.event.pump()
 
