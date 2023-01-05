@@ -4,7 +4,7 @@ from buttons import Button
 
 
 def settings_screen(screen: pygame.display, clock: pygame.time.Clock):
-    button = Button('Назад', 'green', 'red', 30, 30, 200, 100)
+    button = Button('Назад', (45, 170, 201), (226, 149, 61), 30, 30, 200, 100)
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
