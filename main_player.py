@@ -51,8 +51,8 @@ class MainPlayer(pygame.sprite.Sprite):
     def start_torpedo(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 4,
-                                               self.rect[1] + self.rect.height // 4))
+                self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 4 - 30,
+                                               self.rect[1] + self.rect.height // 4 - 35))
 
     def update_torpedo(self):
         self.torpedo_group.draw(self.screen)
