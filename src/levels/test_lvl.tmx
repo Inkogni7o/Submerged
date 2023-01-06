@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="46" height="27" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="46">
  <tileset firstgid="1" source="../../../../Users/maxim/Desktop/Школа/Хлам/Textures.tsx"/>
- <layer id="1" name="Слой тайлов 1" width="46" height="27">
+ <layer id="1" name="Слой тайлов 1" width="46" height="27" visible="0">
   <data encoding="csv">
 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -32,7 +32,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="2" name="Слой объектов 1" class="Wall" locked="1">
+ <objectgroup id="2" name="Walls" class="Wall" locked="1">
   <object id="1" gid="6" x="0" y="320" width="32" height="32"/>
   <object id="2" gid="6" x="32" y="320" width="32" height="32"/>
   <object id="3" gid="6" x="64" y="320" width="32" height="32"/>

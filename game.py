@@ -12,11 +12,22 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
     player_group = pygame.sprite.Group()
     player_group.add(player)
     pause = False
-    while True:
 
+    gameMap = pytmx.load_pygame('src/levels/test_lvl.tmx')
+    walls_group = pygame.sprite.Group()
+    for layer in gameMap.visible_layers:
+        try:
+            if layer.name == 'Walls':
+                for cell in layer:
+                    wall = pygame.sprite.Sprite()
+                    wall.rect = pygame.Rect(cell.x, cell.y, gameMap.tilewidth, gameMap.tileheight)
+                    walls_group.add(wall)
+        except TypeError:
+            pass
+
+    while True:
         if not pause:
 
-            gameMap = pytmx.load_pygame('src/levels/test_lvl.tmx')
             for layer in gameMap.visible_layers:
                 try:
                     for x, y, gid in layer:
@@ -33,8 +44,10 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         pause = True
-                player.start_torpedo(event)
-            player.update_pos(pygame.key)
+                    if event.key == pygame.K_SPACE:
+                        player.start_torpedo()
+
+            player.update_pos(pygame.key, walls_group)
             player.update_spr()
             player.update_torpedo()
             
