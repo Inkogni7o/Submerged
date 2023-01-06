@@ -11,25 +11,27 @@ class MainPlayer(pygame.sprite.Sprite):
         self.sprite_dir = f'src/player/'
         self.right = False
         self.move = False
+        self.deley = 0
         self.screen = screen
-        self.image = pygame.image.load(f'{self.sprite_dir}6.png')
-        self.rect = self.image.get_rect()
         self.image1 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}1.png'), (300, 200))
         self.image2 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}2.png'), (300, 200))
         self.image3 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}3.png'), (300, 200))
         self.image4 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}4.png'), (300, 200))
         self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png'), (300, 200))
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png'), (300, 200))
+        #self.image7 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}7.png'), (300, 200))
+        self.rect = self.image6.get_rect()
         self.sprite_pac = [
             self.image1, self.image2,
             self.image3, self.image4,
-            self.image5,self.image6,
+            self.image5, self.image6,
         ]
         self.speed = 5
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 
     def update_pos(self, key):
+        self.deley -= 1
         if key.get_pressed()[K_LEFT] or key.get_pressed()[K_a]:
             self.rect.x -= self.speed
             self.right = False
@@ -51,9 +53,10 @@ class MainPlayer(pygame.sprite.Sprite):
     def start_torpedo(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 4 - 30,
-                                               self.rect[1] + self.rect.height // 4 - 35))
-
+                if self.deley <= 0:
+                    self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
+                                                self.rect[1] + self.rect.height // 2))
+                    self.deley = 100
     def update_torpedo(self):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update()
@@ -107,14 +110,11 @@ class Torpedo(pygame.sprite.Sprite):
     def die(self):
         self.speed = 0
         self.cur_sprite += 1
-        print(self.cur_sprite)
         if self.cur_sprite % 3 == 0:
-            print(self.cur_sprite // 3)
             self.image = self.frames[self.cur_sprite // 3]
         if self.cur_sprite >= 45:
             self.cur_sprite = 0
             self.kill()
-
 
     def update(self):
         self.live -= 1
