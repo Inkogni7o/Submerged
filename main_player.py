@@ -21,12 +21,9 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png'), (300, 200))
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png'), (300, 200))
         self.sprite_pac = [
-            self.image1,
-            self.image2,
-            self.image3,
-            self.image4,
-            self.image5,
-            self.image6,
+            self.image1, self.image2,
+            self.image3, self.image4,
+            self.image5,self.image6,
         ]
         self.speed = 5
         self.cur_sprite = 0
@@ -54,9 +51,9 @@ class MainPlayer(pygame.sprite.Sprite):
     def start_torpedo(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                print(self.rect[0], )
-                self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect.center[0], self.rect.center[1]))
-    
+                self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 4,
+                                               self.rect[1] + self.rect.height // 4))
+
     def update_torpedo(self):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update()
@@ -74,7 +71,7 @@ class MainPlayer(pygame.sprite.Sprite):
         else:
             self.image = self.sprite_pac[5]
             if self.right:
-                self.image = pygame.transform.flip(self.sprite_pac[5], 1, 0)
+                self.image = pygame.transform.flip(self.sprite_pac[5], True, False)
 
 
 class Torpedo(pygame.sprite.Sprite):
@@ -83,14 +80,15 @@ class Torpedo(pygame.sprite.Sprite):
         self.dir = dir + 'torpedo/'
         self.right = right
         if self.right:
-            self.image = pygame.transform.flip( pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'), (76, 38)), 1, 0)
+            self.image = pygame.transform.flip(pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'),
+                                                                      (76, 38)), True, False)
         else:
             self.image = pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'), (76, 38))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.speed = 5
+        self.speed = 10
         self.live = 100
-        
+
     def update(self):
         self.live -= 1
         if self.right:
