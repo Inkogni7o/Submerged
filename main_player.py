@@ -1,7 +1,9 @@
-import pygame.sprite
 import os
+
 import pygame
+import pygame.sprite
 from pygame.locals import *
+import pytmx
 
 
 class MainPlayer(pygame.sprite.Sprite):
@@ -21,15 +23,13 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png'), (300, 200))
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png'), (300, 200))
         self.sprite_pac = [
-            self.image1,
-            self.image2,
-            self.image3,
-            self.image4,
-            self.image5,
-            self.image6,
+            self.image1, self.image2,
+            self.image3, self.image4,
+            self.image5, self.image6,
         ]
         self.speed = 4
         self.cur_sprite = 0
+
 
     def update_pos(self, key):
         if key.get_pressed()[K_LEFT] or key.get_pressed()[K_a]:
