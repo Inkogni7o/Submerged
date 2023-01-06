@@ -77,8 +77,9 @@ class MainPlayer(pygame.sprite.Sprite):
 class Torpedo(pygame.sprite.Sprite):
     def __init__(self, dir, right, x, y):
         super(Torpedo, self).__init__()
-        self.dir = dir + 'torpedo/'
+        self.dir = f'src/player/torpedo/'
         self.right = right
+        self.cut_sheet(pygame.image.load(self.dir + 'animation.png'), 8, 2)
         if self.right:
             self.image = pygame.transform.flip(pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'),
                                                                       (76, 38)), True, False)
@@ -89,6 +90,32 @@ class Torpedo(pygame.sprite.Sprite):
         self.speed = 10
         self.live = 100
 
+    def cut_sheet(self, sheet, columns, rows):
+        self.frames = []
+        self.cur_frame = 0
+        self.cur_sprite = 0
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, 
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(92, 92)
+    
+    def die(self):
+        self.speed = 0
+        self.cur_sprite += 1
+        print(self.cur_sprite)
+        if self.cur_sprite % 3 == 0:
+            print(self.cur_sprite // 3)
+            self.image = self.frames[self.cur_sprite // 3]
+        if self.cur_sprite >= 45:
+            self.cur_sprite = 0
+            self.kill()
+
+
     def update(self):
         self.live -= 1
         if self.right:
@@ -96,4 +123,4 @@ class Torpedo(pygame.sprite.Sprite):
         else:
             self.rect.x -= self.speed
         if self.live <= 0:
-            pass
+            self.die()
