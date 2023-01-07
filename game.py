@@ -17,10 +17,11 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
     walls_group = pygame.sprite.Group()
     for layer in gameMap.visible_layers:
         try:
-            if layer.name == 'Walls':
+            if layer.name == 'walls':
                 for cell in layer:
                     wall = pygame.sprite.Sprite()
                     wall.rect = pygame.Rect(cell.x, cell.y, gameMap.tilewidth, gameMap.tileheight)
+                    wall.mask = pygame.mask.Mask((30, 30))
                     walls_group.add(wall)
         except TypeError:
             pass
@@ -47,7 +48,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key, walls_group)
+            player.update_pos(pygame.key.get_pressed(), walls_group)
             player.update_spr()
             player.update_torpedo()
             
