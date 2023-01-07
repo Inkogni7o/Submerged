@@ -25,7 +25,6 @@ class MainPlayer(pygame.sprite.Sprite):
             self.image3, self.image4,
             self.image5, self.image6,
         ]
-
         self.mask = pygame.mask.from_surface(self.image6)
         self.speed = 5
         self.cur_sprite = 0
@@ -36,19 +35,16 @@ class MainPlayer(pygame.sprite.Sprite):
                 and not keys[pygame.K_DOWN] and not keys[pygame.K_UP]):
             self.move = False
         else:
+            old_main_player_rect = self.rect.copy()
             new_main_player_rect = self.rect.copy()
             new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * self.speed
+            self.rect = new_main_player_rect
             collision = False
             for group in groups:
                 for sprite in group:
-
-                    offset_x = new_main_player_rect.x - sprite.rect.x
-                    offset_y = new_main_player_rect.y - sprite.rect.y
-                    overlap = sprite.mask.overlap(self.mask, (offset_x, offset_y))
-                    if overlap is not None:
-                        print('hit!')
-                        self.move = False
+                    if pygame.sprite.collide_mask(self, sprite):
+                        self.rect = old_main_player_rect
                         collision = True
                         break
 

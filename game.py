@@ -21,7 +21,8 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                 for cell in layer:
                     wall = pygame.sprite.Sprite()
                     wall.rect = pygame.Rect(cell.x, cell.y, gameMap.tilewidth, gameMap.tileheight)
-                    wall.mask = pygame.mask.Mask((30, 30))
+                    wall.image = pygame.Surface((30, 30))
+                    wall.mask = pygame.mask.from_surface(wall.image)
                     walls_group.add(wall)
         except TypeError:
             pass
