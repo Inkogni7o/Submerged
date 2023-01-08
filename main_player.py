@@ -21,7 +21,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png').convert_alpha(), (300, 200))
         self.image = self.image6
         self.rect = self.image6.get_rect()
-        self.rect = self.image6.get_rect()
         self.sprite_pac = [
             self.image1, self.image2,
             self.image3, self.image4,
@@ -32,7 +31,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 
-    def update_pos(self, keys, *groups):
+    def update_pos(self, keys, sdvig, *groups):
         self.deley -= 1
         if (not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]
                 and not keys[pygame.K_DOWN] and not keys[pygame.K_UP]):
@@ -44,16 +43,18 @@ class MainPlayer(pygame.sprite.Sprite):
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
             collision = False
+
             for group in groups:
                 for sprite in group:
                     if pygame.sprite.collide_mask(self, sprite):
                         self.rect = old_main_player_rect
                         collision = True
                         break
-
                 if collision:
                     break
             else:
+                for group in groups:
+                    group.update(sdvig)
                 self.rect = new_main_player_rect
                 self.move = True
                 if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
