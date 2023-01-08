@@ -32,7 +32,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 
-    def update_pos(self, keys, *groups):    
+    def update_pos(self, keys, *groups):
         self.deley -= 1
         if (not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]
                 and not keys[pygame.K_DOWN] and not keys[pygame.K_UP]):
@@ -60,9 +60,9 @@ class MainPlayer(pygame.sprite.Sprite):
                     self.right = True if not keys[pygame.K_LEFT] else False
 
     def start_torpedo(self):
-         if self.deley <= 0:
+        if self.deley <= 0:
             self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
-                                        self.rect[1] + self.rect.height // 2))
+                                           self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
     def update_torpedo(self):
@@ -109,7 +109,7 @@ class Torpedo(pygame.sprite.Sprite):
         self.frames = []
         self.cur_frame = 0
         self.cur_sprite = 0
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, 
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
                                 sheet.get_height() // rows)
         for j in range(rows):
             for i in range(columns):
@@ -118,7 +118,7 @@ class Torpedo(pygame.sprite.Sprite):
                     frame_location, self.rect.size)))
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
-    
+
     def die(self):
         self.speed = 0
         self.cur_sprite += 1
