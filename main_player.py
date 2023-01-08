@@ -39,8 +39,8 @@ class MainPlayer(pygame.sprite.Sprite):
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 
-    def update_pos(self, keys,        self.deley -= 1
- *groups):
+    def update_pos(self, keys, *groups):    
+        self.deley -= 1
         if (not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]
                 and not keys[pygame.K_DOWN] and not keys[pygame.K_UP]):
             self.move = False
@@ -65,56 +65,12 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.move = True
                 self.right = True if not keys[pygame.K_LEFT] else False
 
-        # if key.get_pressed()[K_LEFT] or key.get_pressed()[K_a]:
-        #     self.rect.x -= self.speed
-        #     for group in groups:
-        #         for sprite in group:
-        #             if pygame.sprite.collide_mask(self, sprite):
-        #                 self.rect.y += self.speed
-        #                 break
-        #     else:
-        #         self.right = False
-        #         self.move = True
-        # elif key.get_pressed()[K_RIGHT] or key.get_pressed()[K_d]:
-        #     self.rect.x += self.speed
-        #     for group in groups:
-        #         if pygame.sprite.collide_mask(self, group):
-        #             self.rect.x -= self.speed
-        #             break
-        #     else:
-        #         self.right = True
-        #         self.move = True
-        # elif key.get_pressed()[K_UP] or key.get_pressed()[K_w]:
-        #     self.rect.y -= self.speed - 3
-        #     for group in groups:
-        #         if pygame.sprite.collide_mask(self, group):
-        #             self.rect.y += self.speed - 3
-        #             break
-        #     else:
-        #         self.move = True
-        # elif key.get_pressed()[K_DOWN] or key.get_pressed()[K_s]:
-        #     self.rect.y += self.speed - 3
-        #     for group in groups:
-        #         if pygame.sprite.collide_mask(self, group):
-        #             self.rect.y -= (self.speed - 3)
-        #             break
-        #     else:
-        #         self.move = True
-        # else:
-        #     self.move = False
-        # pygame.event.pump()
-
     def start_torpedo(self):
-        self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
-                                       self.rect[1] + self.rect.height // 2))
+         if self.deley <= 0:
+            self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
+                                        self.rect[1] + self.rect.height // 2))
+            self.deley = 100
 
-    def start_torpedo(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                if self.deley <= 0:
-                    self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
-                                                self.rect[1] + self.rect.height // 2))
-                    self.deley = 100
     def update_torpedo(self):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update()
