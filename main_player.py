@@ -21,13 +21,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png').convert_alpha(), (300, 200))
         self.image = self.image6
         self.rect = self.image6.get_rect()
-        self.image1 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}1.png'), (300, 200))
-        self.image2 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}2.png'), (300, 200))
-        self.image3 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}3.png'), (300, 200))
-        self.image4 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}4.png'), (300, 200))
-        self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png'), (300, 200))
-        self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png'), (300, 200))
-        #self.image7 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}7.png'), (300, 200))
         self.rect = self.image6.get_rect()
         self.sprite_pac = [
             self.image1, self.image2,
