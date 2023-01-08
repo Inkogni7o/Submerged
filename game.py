@@ -18,10 +18,12 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
     for layer in gameMap.visible_layers:
         try:
             if layer.name == 'walls':
+                image = pygame.image.load('src/textures/sand.png')
+                image = pygame.transform.scale(image, (30, 30))
                 for cell in layer:
                     wall = pygame.sprite.Sprite()
                     wall.rect = pygame.Rect(cell.x, cell.y, gameMap.tilewidth, gameMap.tileheight)
-                    wall.image = pygame.Surface((30, 30))
+                    wall.image = image
                     wall.mask = pygame.mask.from_surface(wall.image)
                     walls_group.add(wall)
         except TypeError:
