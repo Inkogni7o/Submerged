@@ -41,7 +41,7 @@ class MainPlayer(pygame.sprite.Sprite):
             old_main_player_rect = self.rect.copy()
             new_main_player_rect = self.rect.copy()
             new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed
-            new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * self.speed
+            new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
             collision = False
             for group in groups:
@@ -56,7 +56,8 @@ class MainPlayer(pygame.sprite.Sprite):
             else:
                 self.rect = new_main_player_rect
                 self.move = True
-                self.right = True if not keys[pygame.K_LEFT] else False
+                if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
+                    self.right = True if not keys[pygame.K_LEFT] else False
 
     def start_torpedo(self):
          if self.deley <= 0:
