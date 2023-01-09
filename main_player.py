@@ -10,7 +10,7 @@ class MainPlayer(pygame.sprite.Sprite):
         super(MainPlayer, self).__init__()
         self.BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.sprite_dir = f'src/player/'
-        self.right = False
+        self.right = True
         self.move = False
         self.move_map = False
         self.deley = 0

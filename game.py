@@ -3,14 +3,12 @@ from sys import exit
 
 import pytmx
 
-from config import get_monitor_size
 from main_player import MainPlayer
 from environment import Wall
 from pause import pause_screen
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
-    SIZE = get_monitor_size()
     player = MainPlayer(screen)
     player_group = pygame.sprite.Group()
     player_group.add(player)
@@ -68,5 +66,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             if pause_screen(screen, clock):
                 pause = False
             else:
-                # начать уровень заново
-                pass
+                for sprite in walls_group:
+                    sprite.rect = sprite.rect.move(a, 0)
+                player.rect.x, player.rect.y, a = 0, 0, 0
+                pause = False
