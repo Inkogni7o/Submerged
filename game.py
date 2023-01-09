@@ -3,12 +3,14 @@ from sys import exit
 
 import pytmx
 
+from config import get_monitor_size
 from main_player import MainPlayer
 from environment import Wall
 from pause import pause_screen
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
+    SIZE = get_monitor_size()
     player = MainPlayer(screen)
     player_group = pygame.sprite.Group()
     player_group.add(player)
@@ -47,13 +49,15 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key.get_pressed(),
-                              (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT])
-                              * player.speed, walls_group)
-            if player.rect.x >= 0:
+            player.update_pos(pygame.key.get_pressed(), walls_group)
+
+            if player.move_map and not player.collision:
                 a += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
+                walls_group.update(
+                    (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+
             player.update_spr()
-            player.update_torpedo()
+            player.update_torpedo(walls_group)
 
             player_group.draw(screen)
             pygame.display.flip()

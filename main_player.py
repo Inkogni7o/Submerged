@@ -1,7 +1,8 @@
 import pygame.sprite
 import os
 import pygame
-from pygame.locals import *
+
+from config import get_monitor_size
 
 
 class MainPlayer(pygame.sprite.Sprite):
@@ -11,27 +12,29 @@ class MainPlayer(pygame.sprite.Sprite):
         self.sprite_dir = f'src/player/'
         self.right = False
         self.move = False
+        self.move_map = False
         self.deley = 0
         self.screen = screen
-        self.image1 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}1.png').convert_alpha(), (300, 200))
-        self.image2 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}2.png').convert_alpha(), (300, 200))
-        self.image3 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}3.png').convert_alpha(), (300, 200))
-        self.image4 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}4.png').convert_alpha(), (300, 200))
-        self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png').convert_alpha(), (300, 200))
+        # self.image1 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}1.png').convert_alpha(), (300, 200))
+        # self.image2 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}2.png').convert_alpha(), (300, 200))
+        # self.image3 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}3.png').convert_alpha(), (300, 200))
+        # self.image4 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}4.png').convert_alpha(), (300, 200))
+        # self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png').convert_alpha(), (300, 200))
         self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png').convert_alpha(), (300, 200))
         self.image = self.image6
         self.rect = self.image6.get_rect()
-        self.sprite_pac = [
-            self.image1, self.image2,
-            self.image3, self.image4,
-            self.image5, self.image6,
-        ]
+        # self.sprite_pac = [
+        #     self.image1, self.image2,
+        #     self.image3, self.image4,
+        #     self.image5, self.image6,
+        # ]
         self.mask = pygame.mask.from_surface(self.image6)
         self.speed = 5
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 
-    def update_pos(self, keys, sdvig, *groups):
+    def update_pos(self, keys, *groups):
+        self.collision = False
         self.deley -= 1
         if (not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]
                 and not keys[pygame.K_DOWN] and not keys[pygame.K_UP]):
@@ -39,26 +42,31 @@ class MainPlayer(pygame.sprite.Sprite):
         else:
             old_main_player_rect = self.rect.copy()
             new_main_player_rect = self.rect.copy()
-            new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed
+            new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed * 2
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
-            collision = False
+            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= get_monitor_size()[0] // 2:
+                self.move_map = False
+            else:
+                self.move_map = True
 
             for group in groups:
                 for sprite in group:
                     if pygame.sprite.collide_mask(self, sprite):
                         self.rect = old_main_player_rect
-                        collision = True
+                        self.collision = True
                         break
-                if collision:
+                if self.collision:
                     break
             else:
-                for group in groups:
-                    group.update(sdvig)
-                self.rect = new_main_player_rect
-                self.move = True
-                if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
-                    self.right = True if not keys[pygame.K_LEFT] else False
+                if not self.move_map:
+                    self.rect = new_main_player_rect
+                    self.rect.x -= (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed
+                    self.move = True
+                    if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
+                        self.right = True if not keys[pygame.K_LEFT] else False
+                else:
+                    self.rect = old_main_player_rect
 
     def start_torpedo(self):
         if self.deley <= 0:
@@ -66,28 +74,22 @@ class MainPlayer(pygame.sprite.Sprite):
                                            self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
-    def update_torpedo(self):
+    def update_torpedo(self, *groups):
         self.torpedo_group.draw(self.screen)
-        self.torpedo_group.update()
+        self.torpedo_group.update(groups)
 
     def update_spr(self):
         if self.move:
             self.cur_sprite += 1
-            if self.cur_sprite % 10 == 0:
-                self.image = self.sprite_pac[self.cur_sprite // 10]
-                self.mask = pygame.mask.from_surface(self.image)
-                if self.right:
-                    self.image = pygame.transform.flip(self.sprite_pac[self.cur_sprite // 10], True, False)
-                    self.mask = pygame.mask.from_surface(self.image)
-
-            if self.cur_sprite >= 50:
-                self.cur_sprite = 0
-        else:
-            self.image = self.sprite_pac[5]
-            self.mask = pygame.mask.from_surface(self.image)
             if self.right:
-                self.image = pygame.transform.flip(self.sprite_pac[5], True, False)
-                self.mask = pygame.mask.from_surface(self.image)
+                self.image = pygame.transform.flip(self.image6.convert_alpha(), True, False)
+            else:
+                self.image = self.image6.convert_alpha()
+        else:
+            if self.right:
+                self.image = pygame.transform.flip(self.image6.convert_alpha(), True, False)
+            else:
+                self.image = self.image6.convert_alpha()
 
 
 class Torpedo(pygame.sprite.Sprite):
@@ -97,11 +99,13 @@ class Torpedo(pygame.sprite.Sprite):
         self.right = right
         self.cut_sheet(pygame.image.load(self.dir + 'animation.png'), 8, 2)
         if self.right:
-            self.image = pygame.transform.flip(pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'),
-                                                                      (76, 38)), True, False)
+            self.image = pygame.transform.flip(
+                pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png').convert_alpha(),
+                                       (76, 38)), True, False)
         else:
             self.image = pygame.transform.scale(pygame.image.load(f'{self.dir}torpedo.png'), (76, 38))
         self.rect = self.image.get_rect()
+        self.masc = pygame.mask.from_surface(self.image)
         self.rect.center = (x, y)
         self.speed = 10
         self.live = 100
@@ -129,7 +133,11 @@ class Torpedo(pygame.sprite.Sprite):
             self.cur_sprite = 0
             self.kill()
 
-    def update(self):
+    def update(self, groups):
+        for group in groups:
+            for sprite in group:
+                if pygame.sprite.collide_mask(self, sprite):
+                    self.die()
         self.live -= 1
         if self.right:
             self.rect.x += self.speed
