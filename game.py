@@ -25,7 +25,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
         except TypeError:
             pass
 
-    a = 0
+    shift = 0
     while True:
         if not pause:
             for layer in gameMap.visible_layers:
@@ -33,7 +33,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                     for x, y, gid in layer:
                         tile = gameMap.get_tile_image_by_gid(gid)
                         if tile is not None:
-                            screen.blit(tile, (x * gameMap.tilewidth - a, y * gameMap.tileheight))
+                            screen.blit(tile, (x * gameMap.tilewidth - shift, y * gameMap.tileheight))
                 except TypeError:
                     pass
 
@@ -50,7 +50,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             player.update_pos(pygame.key.get_pressed(), walls_group)
 
             if player.move_map and not player.collision:
-                a += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
+                shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
                 walls_group.update(
                     (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
 
@@ -67,6 +67,6 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                 pause = False
             else:
                 for sprite in walls_group:
-                    sprite.rect = sprite.rect.move(a, 0)
-                player.rect.x, player.rect.y, a = 0, 0, 0
+                    sprite.rect = sprite.rect.move(shift, 0)
+                player.rect.x, player.rect.y, shift = 0, 0, 0
                 pause = False

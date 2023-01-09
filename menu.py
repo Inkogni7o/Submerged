@@ -1,15 +1,18 @@
 import pygame
 from sys import exit
 
+from config import get_monitor_size
 from buttons import Button
 
 
 def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):
+    image = pygame.image.load('src/backgrounds/plug.png')
+    image = pygame.transform.scale(image, get_monitor_size())
     buttons = [Button('Начать игру!', (45, 170, 201), (226, 149, 61), 1450, 650, 400, 100),
                Button('Настройки', (45, 170, 201), (226, 149, 61), 1450, 800, 400, 100),
                Button('Выйти', (45, 170, 201), (226, 149, 61), 1450, 950, 400, 100)]
     while True:
-        screen.fill((0, 0, 0))
+        screen.blit(image, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

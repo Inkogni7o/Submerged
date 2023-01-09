@@ -15,20 +15,11 @@ class MainPlayer(pygame.sprite.Sprite):
         self.move_map = False
         self.deley = 0
         self.screen = screen
-        # self.image1 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}1.png').convert_alpha(), (300, 200))
-        # self.image2 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}2.png').convert_alpha(), (300, 200))
-        # self.image3 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}3.png').convert_alpha(), (300, 200))
-        # self.image4 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}4.png').convert_alpha(), (300, 200))
-        # self.image5 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}5.png').convert_alpha(), (300, 200))
-        self.image6 = pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}6.png').convert_alpha(), (300, 200))
-        self.image = self.image6
-        self.rect = self.image6.get_rect()
-        # self.sprite_pac = [
-        #     self.image1, self.image2,
-        #     self.image3, self.image4,
-        #     self.image5, self.image6,
-        # ]
-        self.mask = pygame.mask.from_surface(self.image6)
+        self.image_player = \
+            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (300, 200))
+        self.image = self.image_player
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.speed = 5
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
@@ -82,14 +73,14 @@ class MainPlayer(pygame.sprite.Sprite):
         if self.move:
             self.cur_sprite += 1
             if self.right:
-                self.image = pygame.transform.flip(self.image6.convert_alpha(), True, False)
+                self.image = pygame.transform.flip(self.image_player, True, False)
             else:
-                self.image = self.image6.convert_alpha()
+                self.image = self.image_player
         else:
             if self.right:
-                self.image = pygame.transform.flip(self.image6.convert_alpha(), True, False)
+                self.image = pygame.transform.flip(self.image_player, True, False)
             else:
-                self.image = self.image6.convert_alpha()
+                self.image = self.image_player
 
 
 class Torpedo(pygame.sprite.Sprite):
