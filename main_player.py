@@ -20,7 +20,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 5
+        self.speed = 8
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
 

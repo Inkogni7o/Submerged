@@ -9,6 +9,7 @@ pygame.init()
 
 screen = pygame.display.set_mode(get_monitor_size())
 clock = pygame.time.Clock()
+clock.tick(120)
 
 now_screen = 'start'
 while True:
