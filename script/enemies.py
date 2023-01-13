@@ -32,15 +32,31 @@ class Cuttlefish(pygame.sprite.Sprite):
         self.rect.x = 800
         self.rect.y = 200
 
-    def update(self, group):
+    def update(self, group, player_position):
         self.delay -= 1
         if self.delay <= 0:
-            self.launch_bullet(group)
+            self.launch_bullet(group, player_position)
             self.delay = 100
         #self.rect.x -= 1
 
-    def launch_bullet(self, group):
-        bullet = Ammo(10, 0, self.rect.x // 2, self.rect.y // 2)
+    def launch_bullet(self, group, player_position):
+        x1 = player_position[0]
+        y1 = player_position[1]
+        x2 = self.rect.x
+        y2 = self.rect.y
+        if x2 >= x1:
+            z = x2 - 10
+            z1  = x2 - 20
+            differencex = -10
+        else:
+            z = x2 + 10
+            z1  = x2 + 20
+            differencex = 10
+        firtsy = (((z) - x1) / (x2 - x1)) * (y2 - y1) + y1
+        secondy = (((z1) - x1) / (x2 - x1)) * (y2 - y1) + y1
+        differencey = firtsy - secondy
+        bullet = Ammo(differencex, -differencey, self.rect[0] + self.rect.width // 2,
+                                        self.rect[1] + self.rect.height // 2)
         group.add(bullet)
         self.deley = 100
         

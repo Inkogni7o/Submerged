@@ -57,6 +57,9 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.move = True
                 if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
                     self.right = True if not keys[pygame.K_LEFT] else False
+    
+    def get_pos(self):
+        return (self.rect.center[0], self.rect.center[1])
 
     def start_torpedo(self):
          if self.deley <= 0:

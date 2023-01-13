@@ -61,8 +61,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             player_group.draw(screen)
 
             enemies.draw(screen)
-            enemies.update(bullets_group)
-            print(bullets_group)
+            enemies.update(bullets_group, player.get_pos())
             bullets_group.draw(screen)
 
             bullets_group.update()
