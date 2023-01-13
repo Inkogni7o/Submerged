@@ -1,9 +1,9 @@
 import pygame
 
-from game import main_game
-from menu import introductory_menu
-from settings import settings_screen
-from config import get_monitor_size
+from script.game import main_game
+from script.menu import introductory_menu
+from script.settings import settings_screen
+from script.config import get_monitor_size
 
 pygame.init()
 
