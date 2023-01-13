@@ -4,7 +4,7 @@ from sys import exit
 import pytmx
 
 from main_player import MainPlayer
-from pause import pause_screen
+from script.pause import pause_screen
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
