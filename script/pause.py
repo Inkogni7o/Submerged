@@ -1,8 +1,8 @@
 from sys import exit
 import pygame
 
-from config import get_monitor_size
-from buttons import Button
+from script.config import get_monitor_size
+from script.buttons import Button
 
 
 def pause_screen(screen: pygame.display, clock: pygame.time.Clock):

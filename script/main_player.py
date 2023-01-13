@@ -2,7 +2,7 @@ import pygame.sprite
 import os
 import pygame
 
-from config import get_monitor_size
+from script.config import get_monitor_size
 
 
 class MainPlayer(pygame.sprite.Sprite):
@@ -68,6 +68,9 @@ class MainPlayer(pygame.sprite.Sprite):
     def update_torpedo(self, *groups):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update(groups)
+    
+    def get_pos(self):
+        return (self.rect.center[0], self.rect.center[1])
 
     def update_spr(self):
         if self.move:

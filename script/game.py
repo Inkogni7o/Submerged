@@ -3,15 +3,19 @@ from sys import exit
 
 import pytmx
 
-from main_player import MainPlayer
-from environment import Wall
-from pause import pause_screen
+from script.main_player import MainPlayer
+from script.pause import pause_screen
+from script.environment import Wall
+from script.enemies import Cuttlefish
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
     player = MainPlayer(screen)
     player_group = pygame.sprite.Group()
     player_group.add(player)
+    bullets_group = pygame.sprite.Group()
+    enemies = pygame.sprite.Group()
+    enem = Cuttlefish(enemies)
     pause = False
 
     gameMap = pytmx.load_pygame('src/levels/test_lvl.tmx')
@@ -56,6 +60,12 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
 
             player.update_spr()
             player.update_torpedo(walls_group)
+
+            enemies.draw(screen)
+            enemies.update(bullets_group, player.get_pos())
+            bullets_group.draw(screen)
+
+            bullets_group.update()
 
             player_group.draw(screen)
             pygame.display.flip()

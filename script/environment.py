@@ -12,3 +12,9 @@ class Wall(pygame.sprite.Sprite):
 
     def update(self, dx) -> None:
         self.rect = self.rect.move(-dx, 0)
+import pygame.sprite
+
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Wall, self).__init__()
