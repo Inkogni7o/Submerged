@@ -1,6 +1,6 @@
 import pygame
 from sys import exit
-from buttons import Button
+from script.buttons import Button
 
 
 def settings_screen(screen: pygame.display, clock: pygame.time.Clock):

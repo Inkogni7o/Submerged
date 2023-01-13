@@ -1,7 +1,7 @@
 import pygame
 from sys import exit
 
-from buttons import Button
+from script.buttons import Button
 
 
 def introductory_menu(screen: pygame.display, clock: pygame.time.Clock):

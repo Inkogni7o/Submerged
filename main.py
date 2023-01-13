@@ -5,6 +5,7 @@ from script.menu import introductory_menu
 from script.settings import settings_screen
 from script.config import get_monitor_size
 
+
 pygame.init()
 
 screen = pygame.display.set_mode(get_monitor_size())
