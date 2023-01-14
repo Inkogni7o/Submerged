@@ -28,7 +28,6 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
                     walls_group.add(wall)
         except TypeError:
             pass
-
     shift = 0
     while True:
         if not pause:
@@ -70,7 +69,6 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
             player_group.draw(screen)
             pygame.display.flip()
             clock.tick(60)
-            screen.fill((0, 0, 0))
 
         else:
             if pause_screen(screen, clock):

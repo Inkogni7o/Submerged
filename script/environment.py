@@ -1,3 +1,5 @@
+import random
+
 import pygame.sprite
 
 
@@ -12,9 +14,26 @@ class Wall(pygame.sprite.Sprite):
 
     def update(self, dx) -> None:
         self.rect = self.rect.move(-dx, 0)
-import pygame.sprite
 
 
-class Wall(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Wall, self).__init__()
+class Bubble:
+    color = [255, 255, 255]
+    speed = 1
+
+    def __init__(self, size: tuple):
+        self.monitor_size = size
+        self.generate_start_position(True)
+
+    def generate_start_position(self, yrandom=False):
+        if yrandom:
+            self.position = [random.randint(2, self.monitor_size[0] - 2), random.randint(1, self.monitor_size[1])]
+        else:
+            self.position = [self.position[0], self.monitor_size[1]]
+
+    def update(self):
+        self.position[1] -= self.speed
+        if self.position[1] < 0:
+            self.generate_start_position(False)
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, pygame.Color('white'), self.position, 3, 1)
