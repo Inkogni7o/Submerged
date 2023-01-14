@@ -9,7 +9,7 @@ from script.environment import Wall
 from script.enemies import Cuttlefish
 
 
-def main_game(screen: pygame.display, clock: pygame.time.Clock):
+def main_game(level, screen: pygame.display, clock: pygame.time.Clock):
     player = MainPlayer(screen)
     player_group = pygame.sprite.Group()
     player_group.add(player)
@@ -18,25 +18,26 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
     enem = Cuttlefish(enemies)
     pause = False
 
-    gameMap = pytmx.load_pygame('src/levels/test_lvl.tmx')
+    game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
     walls_group = pygame.sprite.Group()
-    for layer in gameMap.visible_layers:
+    for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':
                 for cell in layer:
-                    wall = Wall(cell, gameMap.tilewidth, gameMap.tileheight)
+                    wall = Wall(cell, game_map.tilewidth, game_map.tileheight)
                     walls_group.add(wall)
         except TypeError:
             pass
+
     shift = 0
     while True:
         if not pause:
-            for layer in gameMap.visible_layers:
+            for layer in game_map.visible_layers:
                 try:
                     for x, y, gid in layer:
-                        tile = gameMap.get_tile_image_by_gid(gid)
+                        tile = game_map.get_tile_image_by_gid(gid)
                         if tile is not None:
-                            screen.blit(tile, (x * gameMap.tilewidth - shift, y * gameMap.tileheight))
+                            screen.blit(tile, (x * game_map.tilewidth - shift, y * game_map.tileheight))
                 except TypeError:
                     pass
 

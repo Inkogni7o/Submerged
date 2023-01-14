@@ -43,6 +43,11 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.move_map = False
             else:
                 self.move_map = True
+            if self.rect.y <= 0:
+                self.collision = True
+            if self.collision:
+                self.rect = old_main_player_rect
+                return
 
             for group in groups:
                 for sprite in group:
