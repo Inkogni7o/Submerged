@@ -16,13 +16,15 @@ class MainPlayer(pygame.sprite.Sprite):
         self.deley = 0
         self.screen = screen
         self.image_player = \
-            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (300, 200))
+            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (150, 100))
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 5
         self.cur_sprite = 0
         self.torpedo_group = pygame.sprite.Group()
+        self.rect.x = 100
+        self.rect.y = 100
 
     def update_pos(self, keys, *groups):
         self.collision = False
@@ -70,7 +72,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.torpedo_group.update(groups)
     
     def get_pos(self):
-        return (self.rect.center[0], self.rect.center[1])
+        return (self.rect[0] + self.rect.width // 2, self.rect[1] + self.rect.height // 2)
 
     def update_spr(self):
         if self.move:

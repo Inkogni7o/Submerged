@@ -6,7 +6,7 @@ import pytmx
 from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall
-from script.enemies import Cuttlefish
+from script.enemies import Cuttlefish, Yari
 
 
 def main_game(screen: pygame.display, clock: pygame.time.Clock):
@@ -15,6 +15,7 @@ def main_game(screen: pygame.display, clock: pygame.time.Clock):
     player_group.add(player)
     bullets_group = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
+    #enem = Yari(enemies)
     enem = Cuttlefish(enemies)
     pause = False
 
