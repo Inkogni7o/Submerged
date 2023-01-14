@@ -20,9 +20,12 @@ class Bubble:
     color = [255, 255, 255]
     speed = 1
 
-    def __init__(self, size: tuple):
+    def __init__(self, size: tuple, position=None):
         self.monitor_size = size
-        self.generate_start_position(True)
+        if position is None:
+            self.generate_start_position(True)
+        else:
+            self.position = position
 
     def generate_start_position(self, yrandom=False):
         if yrandom:
