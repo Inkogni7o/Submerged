@@ -71,7 +71,7 @@ class MainPlayer(pygame.sprite.Sprite):
     def update_torpedo(self, *groups):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update(groups)
-    
+
     def get_pos(self):
         return self.rect.center[0], self.rect.center[1]
 
@@ -148,7 +148,7 @@ class AI_Player(MainPlayer):
     def __init__(self, screen, x, y):
         super(AI_Player, self).__init__(screen)
         self.x, self.y = x, y
-        self.monitor_size = get_monitor_size()
+        self.monitor_size = list(get_monitor_size())
         self.bubbles = list()
         self.timer = 4
 
@@ -163,10 +163,20 @@ class AI_Player(MainPlayer):
     def draw(self):
         for bubble in self.bubbles:
             bubble.draw(self.screen)
+            bubble.update()
+            if bubble.death is not None:
+                if bubble.death == 0:
+                    self.bubbles.pop(self.bubbles.index(bubble))
         if not self.right:
             self.screen.blit(self.image, self.get_pos())
         else:
             self.screen.blit(pygame.transform.flip(self.image, True, False), self.get_pos())
         if self.timer == 0:
-            self.bubbles.append(Bubble(self.monitor_size, (self.rect.center[0], self.rect.center[1])))
+            for _ in range(2):
+                self.bubbles.append(Bubble(self.monitor_size,
+                                           [self.rect.center[0] + random.randint(95, 100),
+                                            self.rect.center[1] + random.randint(80, 120)], True))
+                self.bubbles.append(Bubble(self.monitor_size,
+                                           [self.rect.center[0] + random.randint(95, 100),
+                                            self.rect.center[1] + random.randint(80, 120)], True))
             self.timer = 4

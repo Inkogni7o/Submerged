@@ -20,8 +20,9 @@ class Bubble:
     color = [255, 255, 255]
     speed = 1
 
-    def __init__(self, size: tuple, position=None):
+    def __init__(self, size: list, position=None, death=None):
         self.monitor_size = size
+        self.death = 100 if death else None
         if position is None:
             self.generate_start_position(True)
         else:
@@ -34,6 +35,8 @@ class Bubble:
             self.position = [self.position[0], self.monitor_size[1]]
 
     def update(self):
+        if self.death is not None:
+            self.death -= 1
         self.position[1] -= self.speed
         if self.position[1] < 0:
             self.generate_start_position(False)
