@@ -51,10 +51,11 @@ class MainPlayer(pygame.sprite.Sprite):
 
             for group in groups:
                 for sprite in group:
-                    if pygame.sprite.collide_mask(self, sprite):
-                        self.rect = old_main_player_rect
-                        self.collision = True
-                        break
+                    if 0 <= sprite.rect.x <= SIZE[0] // 2:
+                        if pygame.sprite.collide_mask(self, sprite):
+                            self.rect = old_main_player_rect
+                            self.collision = True
+                            break
                 if self.collision:
                     break
             else:
