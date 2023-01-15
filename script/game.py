@@ -59,7 +59,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock):
                     (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
 
             player.update_spr()
-            player.update_torpedo(walls_group)
+            player.update_torpedo(player, walls_group)
 
             enemies.draw(screen)
             enemies.update(bullets_group, player.get_pos())

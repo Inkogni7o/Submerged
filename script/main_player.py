@@ -74,9 +74,9 @@ class MainPlayer(pygame.sprite.Sprite):
                                            self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
-    def update_torpedo(self, *groups):
+    def update_torpedo(self, player, *groups):
         self.torpedo_group.draw(self.screen)
-        self.torpedo_group.update(groups)
+        self.torpedo_group.update(player, groups)
 
     def get_pos(self):
         return self.rect.center[0], self.rect.center[1]
@@ -127,27 +127,30 @@ class Torpedo(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
 
-    def die(self):
+    def die(self, player: MainPlayer):
         self.speed = 0
         self.cur_sprite += 1
+        if player.move_map:
+            self.rect.x = self.rect.x + player.speed if not player.right else self.rect.x - player.speed
         if self.cur_sprite % 3 == 0:
             self.image = self.frames[self.cur_sprite // 3]
         if self.cur_sprite >= 45:
             self.cur_sprite = 0
             self.kill()
 
-    def update(self, groups):
+    def update(self, player, groups):
         for group in groups:
             for sprite in group:
-                if pygame.sprite.collide_mask(self, sprite):
-                    self.die()
+                if 0 < sprite.rect.x < SIZE[0] // 2:
+                    if pygame.sprite.collide_mask(self, sprite):
+                        self.die(player)
         self.live -= 1
         if self.right:
             self.rect.x += self.speed
         else:
             self.rect.x -= self.speed
         if self.live <= 0:
-            self.die()
+            self.die(player)
 
 
 class AI_Player(MainPlayer):
