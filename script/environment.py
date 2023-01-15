@@ -18,7 +18,7 @@ class Wall(pygame.sprite.Sprite):
 
 class Bubble:
     color = [255, 255, 255]
-    speed = 1
+    speed = 0.5
 
     def __init__(self, size: list, position=None, death=None):
         self.monitor_size = size
@@ -37,7 +37,7 @@ class Bubble:
     def update(self):
         if self.death is not None:
             self.death -= 1
-        self.position[1] -= self.speed
+        self.position[1] -= self.speed if self.death is None else self.speed + 1
         if self.position[1] < 0:
             self.generate_start_position(False)
 

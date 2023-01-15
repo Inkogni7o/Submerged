@@ -19,7 +19,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.deley = 0
         self.screen = screen
         self.image_player = \
-            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (300, 200))
+            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (150, 85))
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
@@ -156,7 +156,7 @@ class Torpedo(pygame.sprite.Sprite):
 class AI_Player(MainPlayer):
     def __init__(self, screen, x, y):
         super(AI_Player, self).__init__(screen)
-        self.x, self.y = x, y
+        self.rect.x, self.rect.y = x, y
         self.monitor_size = list(SIZE)
         self.bubbles = list()
         self.timer = 4
@@ -166,26 +166,22 @@ class AI_Player(MainPlayer):
         self.rect.y += y
         self.timer -= 1
         if self.rect.x > self.monitor_size[0]:
-            self.rect.x = -400
-            self.rect.center = self.rect.center[0], random.randint(300, self.monitor_size[1] - 300)
+            self.rect.center = -300, random.randint(300, self.monitor_size[1] - 300)
 
     def draw(self):
         for bubble in self.bubbles:
             bubble.draw(self.screen)
             bubble.update()
             if bubble.death is not None:
-                if bubble.death == 0:
+                if bubble.death == 0 or bubble.position[0] < 0:
                     self.bubbles.pop(self.bubbles.index(bubble))
         if not self.right:
-            self.screen.blit(self.image, self.get_pos())
+            self.screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
-            self.screen.blit(pygame.transform.flip(self.image, True, False), self.get_pos())
+            self.screen.blit(pygame.transform.flip(self.image, True, False), (self.rect.x, self.rect.y))
         if self.timer == 0:
-            for _ in range(2):
-                self.bubbles.append(Bubble(self.monitor_size,
-                                           [self.rect.center[0] + random.randint(95, 100),
-                                            self.rect.center[1] + random.randint(80, 120)], True))
-                self.bubbles.append(Bubble(self.monitor_size,
-                                           [self.rect.center[0] + random.randint(95, 100),
-                                            self.rect.center[1] + random.randint(80, 120)], True))
+            for _ in range(4):
+                self.bubbles.append(Bubble(self.monitor_size, [random.randint(self.rect.x + 10, self.rect.x + 20),
+                                            random.randint(self.rect.y + 10, self.rect.y + self.rect.height - 10)],
+                                           True))
             self.timer = 4
