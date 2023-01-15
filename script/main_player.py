@@ -4,7 +4,7 @@ import pygame.sprite
 import os
 import pygame
 
-from script.config import get_monitor_size
+from script.config import SIZE
 from script.environment import Bubble
 
 
@@ -39,7 +39,7 @@ class MainPlayer(pygame.sprite.Sprite):
             new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed * 2
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
-            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= get_monitor_size()[0] // 2:
+            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= SIZE[0] // 2:
                 self.move_map = False
             else:
                 self.move_map = True
@@ -153,7 +153,7 @@ class AI_Player(MainPlayer):
     def __init__(self, screen, x, y):
         super(AI_Player, self).__init__(screen)
         self.x, self.y = x, y
-        self.monitor_size = list(get_monitor_size())
+        self.monitor_size = list(SIZE)
         self.bubbles = list()
         self.timer = 4
 

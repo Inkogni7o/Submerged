@@ -1,13 +1,13 @@
 from sys import exit
 import pygame
 
-from script.config import get_monitor_size
+from script.config import SIZE
 from script.buttons import Button
 
 
 def pause_screen(screen: pygame.display, clock: pygame.time.Clock):
     bg = pygame.image.load('src/backgrounds/pause_bg.png')
-    bg = pygame.transform.scale(bg, get_monitor_size())
+    bg = pygame.transform.scale(bg, SIZE)
     buttons = [Button('Продолжить', (45, 170, 201), (226, 149, 61), 750, 400, 450, 100),
                Button('Начать заново', (45, 170, 201), (226, 149, 61), 750, 550, 450, 100),
                Button('Выйти из игры', (45, 170, 201), (226, 149, 61), 750, 700, 450, 100)]

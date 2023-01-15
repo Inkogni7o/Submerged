@@ -2,14 +2,14 @@ import pygame
 
 from script.game import main_game
 from script.menu import introductory_menu
-from script.config import get_monitor_size
+from script.config import SIZE
 
 
 pygame.init()
 
-screen = pygame.display.set_mode(get_monitor_size())
+screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
-clock.tick(120)
+clock.tick(60)
 
 now_screen = 'start'
 while True:
