@@ -45,7 +45,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     pass
 
             if level == 1:
-                if shift > 7800:
+                if shift > 7900:
                     result = scene(1, screen, player, player_group)
                     pygame.display.flip()
                     if result:
@@ -107,6 +107,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             player_group.draw(screen)
 
+            # жизни героя
             for i in range(player.lives):
                 image = pygame.transform.scale(pygame.image.load('src/textures/life.png'),
                                                (70, 70))

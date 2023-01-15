@@ -16,7 +16,7 @@ def scene(num_scene: int, screen: pygame.display, player: MainPlayer, player_gro
                 exit()
 
         player.move, player.move_map, player.right = False, False, False
-        player.rect.y += 2
+        player.rect.y += 3
         player.update_spr()
         player_group.draw(screen)
         player.bubbles_timer -= 1

@@ -42,7 +42,7 @@ class MainPlayer(pygame.sprite.Sprite):
             new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed * 2
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
-            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= SIZE[0] // 2:
+            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= SIZE[0] // 2 - self.rect.width:
                 self.move_map = False
             else:
                 self.move_map = True
@@ -55,6 +55,7 @@ class MainPlayer(pygame.sprite.Sprite):
             for group in groups:
                 for sprite in group:
                     if 0 <= sprite.rect.x <= SIZE[0] // 2:
+                        # проверка на маску
                         if pygame.sprite.collide_mask(self, sprite):
                             self.rect = old_main_player_rect
                             self.collision = True
