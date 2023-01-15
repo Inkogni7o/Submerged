@@ -16,4 +16,4 @@ while True:
     if now_screen == 'start':
         now_screen = 'level1' if introductory_menu(screen, clock) else 'settings'
     if now_screen == 'level1':
-        main_game(1, screen, clock)
+        main_game(1, screen, clock, (100, 100))
