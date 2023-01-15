@@ -44,13 +44,14 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 except TypeError:
                     pass
 
-            if shift > 1800:
-                result = scene(1, screen, player, player_group)
-                pygame.display.flip()
-                if result:
-                    # завершение уровня
-                    return True
-                continue
+            if level == 1:
+                if shift > 7800:
+                    result = scene(1, screen, player, player_group)
+                    pygame.display.flip()
+                    if result:
+                        # завершение уровня
+                        return True
+                    continue
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -105,6 +106,13 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             bullets_group.update()
 
             player_group.draw(screen)
+
+            for i in range(player.lives):
+                image = pygame.transform.scale(pygame.image.load('src/textures/life.png'),
+                                               (70, 70))
+                image.set_colorkey((14, 209, 69))
+                screen.blit(image, (0 + 80 * i, 0))
+
             pygame.display.flip()
             clock.tick(60)
 

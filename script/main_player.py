@@ -13,6 +13,7 @@ class MainPlayer(pygame.sprite.Sprite):
         super(MainPlayer, self).__init__()
         self.BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.sprite_dir = f'src/player/'
+        self.lives = 3
         self.right = True
         self.move = False
         self.move_map = False
