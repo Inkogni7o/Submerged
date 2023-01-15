@@ -9,6 +9,7 @@ from script.config import SIZE
 from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall, Bubble
+from script.scenes import scene
 from script.enemies import Cuttlefish
 
 
@@ -42,6 +43,14 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                             screen.blit(tile, (x * game_map.tilewidth - shift, y * game_map.tileheight))
                 except TypeError:
                     pass
+
+            if shift > 1800:
+                result = scene(1, screen, player, player_group)
+                pygame.display.flip()
+                if result:
+                    # завершение уровня
+                    return True
+                continue
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
