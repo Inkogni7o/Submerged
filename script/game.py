@@ -1,16 +1,19 @@
+import random
+
 import pygame
 from sys import exit
 
 import pytmx
 
+from script.config import SIZE
 from script.main_player import MainPlayer
 from script.pause import pause_screen
-from script.environment import Wall
+from script.environment import Wall, Bubble
 from script.enemies import Cuttlefish
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock):
-    player = MainPlayer(screen)
+    player = MainPlayer(screen, 100, 100)
     player_group = pygame.sprite.Group()
     player_group.add(player)
     bullets_group = pygame.sprite.Group()
@@ -60,6 +63,30 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock):
 
             player.update_spr()
             player.update_torpedo(player, walls_group)
+
+            player.bubbles_timer -= 1
+            for bubble in player.bubbles:
+                bubble.draw(player.screen)
+                bubble.update()
+                if player.move_map and player.move:
+                    bubble.position = [bubble.position[0] - player.speed, bubble.position[1]]\
+                        if player.right else [bubble.position[0] + player.speed, bubble.position[1]]
+                if bubble.death is not None:
+                    if bubble.death == 0 or bubble.position[0] < 0:
+                        player.bubbles.pop(player.bubbles.index(bubble))
+            if player.bubbles_timer == 0:
+                for _ in range(3):
+                    if player.right:
+                        player.bubbles.append(
+                            Bubble(SIZE, [random.randint(player.rect.x - 5, player.rect.x + 5),
+                                                       random.randint(player.rect.y + 10,
+                                                                      player.rect.y + player.rect.height - 10)], True))
+                    else:
+                        player.bubbles.append(
+                            Bubble(SIZE, [random.randint(player.rect.x + player.rect.width - 5, player.rect.x + player.rect.width + 5),
+                                          random.randint(player.rect.y + 10,
+                                                         player.rect.y + player.rect.height - 10)], True))
+                player.bubbles_timer = 4
 
             enemies.draw(screen)
             enemies.update(bullets_group, player.get_pos())

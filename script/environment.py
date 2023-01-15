@@ -39,7 +39,8 @@ class Bubble:
             self.death -= 1
         self.position[1] -= self.speed if self.death is None else self.speed + 1
         if self.position[1] < 0:
-            self.generate_start_position(False)
+            if self.death is None:
+                self.generate_start_position(False)
 
     def draw(self, screen):
         pygame.draw.circle(screen, pygame.Color('white'), self.position, 3, 1)
