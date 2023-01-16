@@ -11,16 +11,16 @@ class Ammo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.cache[0]
         self.rect.y = self.cache[1]
-        self.timer = 10
+        self.timer = 400
         self.speedx = speedx
         self.speedy = speedy
 
     def update(self, *args, **kwargs):
-        # self.timer -= 1
-        # if self.timer <= 0:
+        self.timer -= 1
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        self.timer = 100
+            if self.timer <= 0:
+                self.kill()
 
 
 class Cuttlefish(pygame.sprite.Sprite):
@@ -31,6 +31,7 @@ class Cuttlefish(pygame.sprite.Sprite):
         self.delay = 100
         self.rect.x = 800
         self.rect.y = 200
+        self.lives = 1
 
     def update(self, group, player_position):
         self.delay -= 1
@@ -59,6 +60,12 @@ class Cuttlefish(pygame.sprite.Sprite):
                                         self.rect[1] + self.rect.height // 2)
         group.add(bullet)
         self.delay = 100
+
+    def get_damage(self):
+        if self.lives > 0:
+            self.lives -= 1
+        else:
+            self.die()
         
         
 class Yari(pygame.sprite.Sprite):
@@ -72,7 +79,8 @@ class Yari(pygame.sprite.Sprite):
         self.delay = 100
         self.rect.x = 1600
         self.rect.y = 200
-        self.right = True            
+        self.right = True  
+        self.lives = 3          
         if self.right:
             self.image = pygame.transform.flip(self.image_player, True, False)
         else:
@@ -100,6 +108,11 @@ class Yari(pygame.sprite.Sprite):
             self.launch_bullet(group, player_position)
             self.delay = 100
 
+    def get_damage(self):
+        if self.lives > 0:
+            self.lives -= 1
+        else:
+            self.die()
 
     def launch_bullet(self, group, player_position):
         x1 = player_position[0]

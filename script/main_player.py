@@ -91,6 +91,15 @@ class MainPlayer(pygame.sprite.Sprite):
         else:
             self.die()
 
+    def die(self):
+        self.cur_sprite += 1
+        if self.cur_sprite % 3 == 0:
+            self.image = self.frames[self.cur_sprite // 3]
+        if self.cur_sprite >= 45:
+            self.cur_sprite = 0
+            self.kill()
+
+
     def cut_sheet(self, sheet, columns, rows):
         self.frames = []
         self.cur_frame = 0
@@ -105,13 +114,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
 
-    def die(self):
-        self.cur_sprite += 1
-        if self.cur_sprite % 3 == 0:
-            self.image = self.frames[self.cur_sprite // 3]
-        if self.cur_sprite >= 45:
-            self.cur_sprite = 0
-            self.kill()
 
 
     def update_torpedo(self, player, *groups):
@@ -132,7 +134,6 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.image_player, True, False)
             else:
                 self.image = self.image_player
-        self.get_damage()
 
 
 class Torpedo(pygame.sprite.Sprite):

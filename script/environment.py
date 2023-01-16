@@ -44,3 +44,11 @@ class Bubble:
 
     def draw(self, screen):
         pygame.draw.circle(screen, pygame.Color('white'), self.position, 3, 1)
+
+
+class Breathing_bubble(pygame.sprite.Sprite):
+    def __init__(self, screen, x=0, y=0):
+        super(MainPlayer, self).__init__()
+        self.image= \
+            pygame.transform.scale(pygame.image.load(f'src/textures/Breathing_bubble.png').convert_alpha(), (80, 80))
+        self.rect = self.image.get_rect()
