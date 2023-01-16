@@ -25,7 +25,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 7
+        self.speed = 20
         self.torpedo_group = pygame.sprite.Group()
         self.bubbles_timer = 4
         self.bubbles = list()

@@ -31,4 +31,4 @@ while True:
         scene(1, screen, None, None)
         now_screen = 'level2' if main_game(1, screen, clock, (100, 100)) else 'level1'
     if now_screen == 'level2':
-        now_screen = 'level3' if main_game(2, screen, clock, (0, 0)) else 'level2'
+        now_screen = 'level3' if main_game(2, screen, clock, (100, 600)) else 'level2'

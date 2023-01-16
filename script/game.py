@@ -8,7 +8,7 @@ import pytmx
 from script.config import SIZE
 from script.main_player import MainPlayer
 from script.pause import pause_screen
-from script.environment import Wall, Bubble
+from script.environment import Wall, Bubble, DeathWall
 from script.scenes import scene
 from script.text import Text
 
@@ -24,12 +24,21 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
     walls_group = pygame.sprite.Group()
+    death_wall_group = pygame.sprite.Group()
     for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':
                 for cell in layer:
                     wall = Wall(cell, game_map.tilewidth, game_map.tileheight)
                     walls_group.add(wall)
+            if layer.name == 'death_walls_up':
+                for cell in layer:
+                    wall = DeathWall(cell, False)
+                    death_wall_group.add(wall)
+            if layer.name == 'death_walls_down':
+                for cell in layer:
+                    wall = DeathWall(cell, True)
+                    death_wall_group.add(wall)
         except TypeError:
             pass
 
@@ -44,6 +53,8 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                             screen.blit(tile, (x * game_map.tilewidth - shift, y * game_map.tileheight))
                 except TypeError:
                     pass
+
+            death_wall_group.draw(screen)
 
             if level == 1:
                 if shift > 7900:
@@ -72,6 +83,8 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     pygame.K_LEFT]) * player.speed
                 walls_group.update(
                     (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+                death_wall_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
+                                         - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
 
             player.update_spr()
             player.update_torpedo(player, walls_group)
