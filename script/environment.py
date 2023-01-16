@@ -63,7 +63,7 @@ class Bubble:
 class Breathing_bubble(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Breathing_bubble, self).__init__()
-        self.image= \
+        self.image = \
             pygame.transform.scale(pygame.image.load(f'src/textures/Breathing_bubble.png').convert_alpha(), (60, 60))
         self.rect = self.image.get_rect()
         self.rect.x = x - 20
@@ -72,40 +72,44 @@ class Breathing_bubble(pygame.sprite.Sprite):
         self.flag = True
         self.move = True
         self.global_timer = 800
+        self.mask = pygame.mask.from_surface(self.image)
 
-    def update(self):
+    def update(self, dx):
+        self.rect = self.rect.move(-dx, 0)
+
+    def update_pos(self):
         self.global_timer -= 1
         if self.global_timer == 0:
             self.kill()
         if self.move:
             self.rect.y -= 0.4
-            self.timer -= 1  
+            self.timer -= 1
             if self.flag:
                 self.rect.x -= 1
             else:
                 self.rect.x += 1
             if self.timer <= 0:
-                self.flag = not(self.flag)
+                self.flag = not self.flag
                 self.timer = 200
-
-    def touch(self):
-        self.kill()
 
 
 class Blower(pygame.sprite.Sprite):
     def __init__(self, group, bubble_group, cell):
         super(Blower, self).__init__(group)
-        self.image= \
+        self.image = \
             pygame.transform.scale(pygame.image.load(f'src/textures/Blower.png').convert_alpha(), (100, 120))
         self.image.set_colorkey((14, 209, 69))
         self.rect = self.image.get_rect()
-        self.VAR = 300
+        self.VAR = 100
         self.timer = self.VAR
         self.group = bubble_group
         self.rect.x = cell.x
         self.rect.y = cell.y
 
-    def update(self):
+    def update(self, dx):
+        self.rect = self.rect.move(-dx, 0)
+
+    def update_timer(self):
         self.timer -= 0.5
         if self.timer <= 0:
             bubble = Breathing_bubble(self.rect[0] + self.rect.width // 2,

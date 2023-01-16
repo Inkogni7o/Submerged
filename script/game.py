@@ -20,7 +20,6 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     player_group.add(player)
     blower_group = pygame.sprite.Group()
     breathing_bubble_group = pygame.sprite.Group()
-    blower = Blower(blower_group, breathing_bubble_group)
     blower_group.add()
     bullets_group = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
@@ -43,6 +42,9 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 for cell in layer:
                     wall = DeathWall(cell, True)
                     death_wall_group.add(wall)
+            if layer.name == 'blower':
+                for cell in layer:
+                    Blower(blower_group, breathing_bubble_group, cell)
         except TypeError:
             pass
 
@@ -80,7 +82,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key.get_pressed(), walls_group)
+            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group)
 
             if player.move_map and not player.collision:
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
@@ -89,6 +91,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
                 death_wall_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
                                          - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+                blower_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
+                                         - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+                breathing_bubble_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
+                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
 
             player.update_spr()
             player.update_torpedo(player, walls_group)
@@ -124,11 +130,16 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             bullets_group.draw(screen)
             bullets_group.update()
 
+            for sprite in blower_group:
+                sprite.update_timer()
             blower_group.draw(screen)
-            blower_group.update()
 
+            for sprite in breathing_bubble_group:
+                sprite.update_pos()
+                if pygame.sprite.collide_mask(sprite, player):
+                    sprite.kill()
+                    # player.air += 10
             breathing_bubble_group.draw(screen)
-            breathing_bubble_group.update()
 
             player_group.draw(screen)
 
