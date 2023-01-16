@@ -142,7 +142,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             for sprite in enemies_group:
                 if 0 <= sprite.rect.x <= SIZE[0]:
-                    sprite.update_pos(player.torpedo_group, player.get_pos())
+                    sprite.update_pos(bullets_group, player.get_pos())
                     if sprite.lives <= 0:
                         sprite.kill()
             enemies_group.draw(screen)
