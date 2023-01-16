@@ -6,6 +6,7 @@ from sys import exit
 import pytmx
 
 from script.config import SIZE
+from script.enemies import Cuttlefish
 from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall, Bubble, Blower, DeathWall
@@ -26,8 +27,11 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     pause = False
 
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
+
     walls_group = pygame.sprite.Group()
     death_wall_group = pygame.sprite.Group()
+    cuttlefish_group = pygame.sprite.Group()
+
     for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':
@@ -45,6 +49,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             if layer.name == 'blower':
                 for cell in layer:
                     Blower(blower_group, breathing_bubble_group, cell)
+            if layer.name == 'cuttlefish':
+                for cell in layer:
+                    Cuttlefish(cuttlefish_group, cell)
+
         except TypeError:
             pass
 
@@ -85,16 +93,16 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             player.update_pos(pygame.key.get_pressed(), walls_group, blower_group)
 
             if player.move_map and not player.collision:
+                move = (pygame.key.get_pressed()[pygame.K_RIGHT]
+                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
                     pygame.K_LEFT]) * player.speed
-                walls_group.update(
-                    (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
-                death_wall_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
-                                         - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
-                blower_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
-                                         - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
-                breathing_bubble_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
-                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+                walls_group.update(move)
+                death_wall_group.update(move)
+                blower_group.update(move)
+                breathing_bubble_group.update(move)
+                cuttlefish_group.update(move)
+                bullets_group.update(move)
 
             player.update_spr()
             player.update_torpedo(player, walls_group)
@@ -127,8 +135,14 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             enemies.draw(screen)
             enemies.update(bullets_group, player.get_pos())
 
+            for sprite in bullets_group:
+                sprite.update_pos(player, walls_group, blower_group)
             bullets_group.draw(screen)
-            bullets_group.update()
+
+            for sprite in cuttlefish_group:
+                if 0 <= sprite.rect.x <= SIZE[0]:
+                    sprite.update_pos(bullets_group, player.get_pos())
+            cuttlefish_group.draw(screen)
 
             for sprite in blower_group:
                 sprite.update_timer()

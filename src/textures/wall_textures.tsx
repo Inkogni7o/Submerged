@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="wall_textures" tilewidth="77" tileheight="89" tilecount="8" columns="0">
+<tileset version="1.9" tiledversion="1.9.2" name="wall_textures" tilewidth="100" tileheight="100" tilecount="9" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="32" height="32" source="sand.png"/>
@@ -24,5 +24,8 @@
  </tile>
  <tile id="8">
   <image width="77" height="89" source="blower_for_tsx.png"/>
+ </tile>
+ <tile id="10">
+  <image width="100" height="100" source="../enemies/cuttlefish.png"/>
  </tile>
 </tileset>

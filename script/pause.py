@@ -8,9 +8,9 @@ from script.buttons import Button
 def pause_screen(screen: pygame.display, clock: pygame.time.Clock):
     bg = pygame.image.load('src/backgrounds/pause_bg.png')
     bg = pygame.transform.scale(bg, SIZE)
-    buttons = [Button('Продолжить', (45, 170, 201), (226, 149, 61), 700, 400, 500, 100),
-               Button('Начать заново', (45, 170, 201), (226, 149, 61), 700, 550, 500, 100),
-               Button('Выйти из игры', (45, 170, 201), (226, 149, 61), 700, 700, 500, 100)]
+    buttons = [Button('Продолжить', (45, 170, 201), (226, 149, 61), 675, 400, 525, 100),
+               Button('Начать заново', (45, 170, 201), (226, 149, 61), 675, 550, 525, 100),
+               Button('Выйти из игры', (45, 170, 201), (226, 149, 61), 675, 700, 525, 100)]
     while True:
         screen.blit(bg, (0, 0))
         for event in pygame.event.get():
