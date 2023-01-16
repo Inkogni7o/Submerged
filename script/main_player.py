@@ -115,7 +115,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.rect = self.rect.move(92, 92)
 
 
-
     def update_torpedo(self, player, *groups):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update(player, groups)

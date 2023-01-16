@@ -8,7 +8,7 @@ import pytmx
 from script.config import SIZE
 from script.main_player import MainPlayer
 from script.pause import pause_screen
-from script.environment import Wall, Bubble
+from script.environment import Wall, Bubble, Blower, Breathing_bubble
 from script.scenes import scene
 from script.enemies import Cuttlefish
 
@@ -17,6 +17,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     player = MainPlayer(screen, *player_pos)
     player_group = pygame.sprite.Group()
     player_group.add(player)
+    blower_group = pygame.sprite.Group()
+    breathing_bubble_group = pygame.sprite.Group()
+    blower = Blower(blower_group, breathing_bubble_group)
+    blower_group.add()
     bullets_group = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     pause = False
@@ -104,6 +108,12 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             bullets_group.draw(screen)
             bullets_group.update()
+
+            blower_group.draw(screen)
+            blower_group.update()
+
+            breathing_bubble_group.draw(screen)
+            breathing_bubble_group.update()
 
             player_group.draw(screen)
 

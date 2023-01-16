@@ -19,18 +19,18 @@ class Ammo(pygame.sprite.Sprite):
         self.timer -= 1
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-            if self.timer <= 0:
-                self.kill()
+        if self.timer <= 0:
+            self.kill()
 
 
 class Cuttlefish(pygame.sprite.Sprite):
-    def __init__(self, group):
+    def __init__(self, group, cell):
         super(Cuttlefish, self).__init__(group)
         self.image = pygame.transform.scale(pygame.image.load(f'src/enemies/Cuttlefish.png').convert_alpha(), (200, 100))
         self.rect = self.image.get_rect()
         self.delay = 100
-        self.rect.x = 800
-        self.rect.y = 200
+        self.rect.x = cell.x
+        self.rect.y = cell.y
         self.lives = 1
 
     def update(self, group, player_position):
@@ -69,7 +69,7 @@ class Cuttlefish(pygame.sprite.Sprite):
         
         
 class Yari(pygame.sprite.Sprite):
-    def __init__(self, group):
+    def __init__(self, group, cell):
         super(Yari, self).__init__(group)
         self.image_player = \
             pygame.transform.scale(pygame.image.load(f'src/enemies/Yari.png').convert_alpha(), (300, 200))
@@ -77,8 +77,8 @@ class Yari(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.delay = 100
-        self.rect.x = 1600
-        self.rect.y = 200
+        self.rect.x = cell.x
+        self.rect.y = cell.y
         self.right = True  
         self.lives = 3          
         if self.right:
