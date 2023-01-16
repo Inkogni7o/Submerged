@@ -8,7 +8,7 @@ import pytmx
 from script.config import SIZE
 from script.main_player import MainPlayer
 from script.pause import pause_screen
-from script.environment import Wall, Bubble, Blower, Breathing_bubble, DeathWall
+from script.environment import Wall, Bubble, Blower, DeathWall
 from script.scenes import scene
 from script.text import Text
 
