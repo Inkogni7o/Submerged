@@ -46,7 +46,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             if level == 1:
                 if shift > 7900:
-                    result = scene(1, screen, player, player_group)
+                    result = scene(2, screen, player, player_group)
                     pygame.display.flip()
                     if result:
                         # завершение уровня

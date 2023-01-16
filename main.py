@@ -3,6 +3,7 @@ import pygame
 from script.environment import Bubble
 from script.game import main_game
 from script.main_player import AI_Player
+from script.scenes import scene
 from script.start_menu import introductory_menu
 from script.config import SIZE
 from script.game_menu import game_menu
@@ -27,6 +28,7 @@ while True:
     if now_screen == 'select_lvl':
         now_screen = lvl_selection(screen, BUBBLES, AI_PLAYER)
     if now_screen == 'level1':
+        scene(1, screen, None, None)
         now_screen = 'level2' if main_game(1, screen, clock, (100, 100)) else 'level1'
     if now_screen == 'level2':
         now_screen = 'level3' if main_game(2, screen, clock, (0, 0)) else 'level2'

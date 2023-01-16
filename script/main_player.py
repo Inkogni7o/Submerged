@@ -113,7 +113,6 @@ class MainPlayer(pygame.sprite.Sprite):
             self.cur_sprite = 0
             self.kill()
 
-
     def update_torpedo(self, player, *groups):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update(player, groups)
@@ -132,7 +131,7 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.image_player, True, False)
             else:
                 self.image = self.image_player
-        self.get_damage()
+        # self.get_damage()
 
 
 class Torpedo(pygame.sprite.Sprite):
