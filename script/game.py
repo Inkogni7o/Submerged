@@ -11,7 +11,6 @@ from script.pause import pause_screen
 from script.environment import Wall, Bubble
 from script.scenes import scene
 from script.text import Text
-from script.enemies import Cuttlefish
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_pos: tuple):
