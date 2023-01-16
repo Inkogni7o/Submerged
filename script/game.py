@@ -24,8 +24,13 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     blower_group.add()
     bullets_group = pygame.sprite.Group()
     pause = False
+
     death_image = pygame.transform.scale(pygame.image.load('src/backgrounds/death_bg.png'), (SIZE[0] - 500, SIZE[1]))
     death_image.set_colorkey((247, 247, 247))
+
+    alpha = 0
+    lose_image = pygame.transform.scale(pygame.image.load('src/backgrounds/lose_bg.png'), SIZE)
+    lose_image.set_alpha(alpha)
 
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
 
@@ -81,7 +86,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     pygame.display.flip()
                     if result:
                         # завершение уровня
-                        return True
+                        return 'level2'
                     continue
 
             for event in pygame.event.get():
@@ -161,8 +166,15 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             player_group.draw(screen)
 
             if player.lives <= 0:
-                screen.blit(death_image, (300, 0))
                 # TODO: сделать либо взрыв, либо выпуск большого количества пузырей в знак проигрыша
+                screen.blit(death_image, (300, 0))
+                screen.blit(lose_image, (0, 0))
+                if alpha < 255:
+                    alpha += 3
+                else:
+                    return 'lose_screen'
+                lose_image.set_alpha(alpha)
+
 
             # жизни героя
             for i in range(player.lives):

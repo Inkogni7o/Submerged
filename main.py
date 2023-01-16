@@ -2,6 +2,7 @@ import pygame
 
 from script.environment import Bubble
 from script.game import main_game
+from script.lose import lose_screen
 from script.main_player import AI_Player
 from script.scenes import scene
 from script.start_menu import introductory_menu
@@ -27,8 +28,10 @@ while True:
         now_screen = game_menu(screen, BUBBLES, AI_PLAYER)
     if now_screen == 'select_lvl':
         now_screen = lvl_selection(screen, BUBBLES, AI_PLAYER)
+    if now_screen == 'lose_screen':
+        now_screen = lose_screen(screen, clock)
     if now_screen == 'level1':
         scene(1, screen, None, None)
-        now_screen = 'level2' if main_game(1, screen, clock, (100, 100)) else 'level1'
+        now_screen = main_game(1, screen, clock, (100, 100))
     if now_screen == 'level2':
-        now_screen = 'level3' if main_game(2, screen, clock, (100, 600)) else 'level2'
+        now_screen = main_game(2, screen, clock, (100, 600))
