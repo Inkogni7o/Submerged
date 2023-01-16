@@ -86,8 +86,6 @@ class Cuttlefish(pygame.sprite.Sprite):
     def get_damage(self):
         if self.lives > 0:
             self.lives -= 1
-        else:
-            self.die()
 
 
 class Yari(pygame.sprite.Sprite):
