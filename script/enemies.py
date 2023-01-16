@@ -98,7 +98,8 @@ class Yari(pygame.sprite.Sprite):
         self.image1 = pygame.transform.flip(self.image_player, True, False)
         self.image = self.image_player
         self.rect = self.image.get_rect()
-        self.delay = 100
+        self.mask = pygame.mask.from_surface(self.image)
+        self.delay = 40
         self.rect.x = cell.x
         self.rect.y = cell.y
         self.right = True
@@ -108,7 +109,10 @@ class Yari(pygame.sprite.Sprite):
         else:
             self.image = self.image_player
 
-    def update(self, group, player_position):
+    def update(self, dx):
+        self.rect = self.rect.move(-dx, 0)
+
+    def update_pos(self, group, player_position):
         self.delay -= 1
         x1 = player_position[0]
         x2 = self.rect[0] + self.rect.width // 2
@@ -153,4 +157,4 @@ class Yari(pygame.sprite.Sprite):
         group.add(bullet3)
         group.add(bullet2)
 
-        self.deley = 100
+        self.deley = 40

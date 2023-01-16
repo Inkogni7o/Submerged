@@ -6,7 +6,7 @@ from sys import exit
 import pytmx
 
 from script.config import SIZE
-from script.enemies import Cuttlefish
+from script.enemies import Cuttlefish, Yari
 from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall, Bubble, Blower, DeathWall
@@ -32,7 +32,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
     walls_group = pygame.sprite.Group()
     death_wall_group = pygame.sprite.Group()
-    cuttlefish_group = pygame.sprite.Group()
+    enemies_group = pygame.sprite.Group()
 
     for layer in game_map.visible_layers:
         try:
@@ -53,7 +53,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     Blower(blower_group, breathing_bubble_group, cell)
             if layer.name == 'cuttlefish':
                 for cell in layer:
-                    Cuttlefish(cuttlefish_group, cell)
+                    Cuttlefish(enemies_group, cell)
+            if layer.name == 'yari':
+                for cell in layer:
+                    Yari(enemies_group, cell)
 
         except TypeError:
             pass
@@ -103,7 +106,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 death_wall_group.update(move)
                 blower_group.update(move)
                 breathing_bubble_group.update(move)
-                cuttlefish_group.update(move)
+                enemies_group.update(move)
                 bullets_group.update(move)
 
             player.update_spr()
@@ -141,10 +144,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 sprite.update_pos(player, walls_group, blower_group)
             bullets_group.draw(screen)
 
-            for sprite in cuttlefish_group:
+            for sprite in enemies_group:
                 if 0 <= sprite.rect.x <= SIZE[0]:
                     sprite.update_pos(bullets_group, player.get_pos())
-            cuttlefish_group.draw(screen)
+            enemies_group.draw(screen)
 
             for sprite in blower_group:
                 sprite.update_timer()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="200" height="36" tilewidth="30" tileheight="30" infinite="0" nextlayerid="5" nextobjectid="532">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="200" height="36" tilewidth="30" tileheight="30" infinite="0" nextlayerid="8" nextobjectid="544">
  <tileset firstgid="1" source="../textures/wall_textures.tsx"/>
  <tileset firstgid="14" source="../textures/cave_textures.tsx"/>
  <layer id="1" name="background" width="200" height="36">
@@ -54,15 +54,21 @@
   <object id="517" gid="14" x="5708" y="312" width="192" height="239"/>
   <object id="518" gid="14" x="4210.67" y="313.333" width="192" height="239"/>
   <object id="519" gid="14" x="4458" y="314" width="192" height="239"/>
-  <object id="522" gid="11" x="1470" y="390" width="100" height="100"/>
-  <object id="523" gid="11" x="1470" y="750" width="100" height="100"/>
-  <object id="524" gid="13" x="2820" y="570" width="300" height="182"/>
-  <object id="525" gid="13" x="4980" y="390" width="300" height="182"/>
-  <object id="526" gid="13" x="4980" y="810" width="300" height="182"/>
-  <object id="527" gid="9" x="450" y="990" width="77" height="89"/>
-  <object id="529" gid="9" x="3030" y="990" width="77" height="89"/>
-  <object id="530" gid="11" x="3240" y="360" width="100" height="100"/>
-  <object id="531" gid="11" x="3270" y="720" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="5" name="blower">
+  <object id="532" gid="9" x="540" y="990" width="77" height="89"/>
+  <object id="533" gid="9" x="2730" y="990" width="77" height="89"/>
+ </objectgroup>
+ <objectgroup id="6" name="cuttlefish">
+  <object id="535" gid="11" x="970" y="386" width="100" height="100"/>
+  <object id="537" gid="11" x="946" y="858" width="100" height="100"/>
+  <object id="538" gid="11" x="2922" y="342" width="100" height="100"/>
+  <object id="539" gid="11" x="2914" y="738" width="100" height="100"/>
+ </objectgroup>
+ <objectgroup id="7" name="yari">
+  <object id="540" gid="13" x="2390" y="583" width="300" height="182"/>
+  <object id="541" gid="13" x="4922" y="455" width="300" height="182"/>
+  <object id="543" gid="13" x="4926" y="923" width="300" height="182"/>
  </objectgroup>
  <objectgroup id="2" name="walls">
   <object id="1" gid="2" x="30" y="120" width="32" height="32"/>
