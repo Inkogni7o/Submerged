@@ -5,11 +5,38 @@ import pygame
 
 from script.config import SIZE
 from script.environment import Bubble
-from script.main_player import MainPlayer
+from script.text import Text
 
 
-def scene(num_scene: int, screen: pygame.display, player: MainPlayer, player_group):
+def scene(num_scene: int, screen: pygame.display, player, player_group):
     if num_scene == 1:
+        image = pygame.transform.scale(pygame.image.load('src/backgrounds/scene_1_1_bg.png'), SIZE)
+        text = Text('Начался потоп', True)
+        now_text = 1
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if now_text == 1:
+                        if not text.end:
+                            text.end, text.string_index = True, len(text.text)
+                        else:
+                            text.change_text('Новый текст')
+                            now_text = 2
+                    elif now_text == 2:
+                        if not text.end:
+                            text.end, text.string_index = True, len(text.text)
+                        else:
+                            return
+
+            screen.blit(image, (0, 0))
+            text.draw(screen)
+            pygame.display.flip()
+
+    if num_scene == 2:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

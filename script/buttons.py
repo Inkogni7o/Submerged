@@ -29,7 +29,7 @@ class Button:
         else:
             pygame.draw.rect(screen, self.color1, (self.x, self.y, self.width, self.height), 0)
 
-        font = pygame.font.SysFont('comicsans', 60)
+        font = pygame.font.Font('src/font.ttf', 55)
         text = font.render(self.text_btn, True, (0, 0, 0))
         if self.mouse_on_btn(pos_x, pos_y):
             screen.blit(text, (self.x + (self.width / 2 - text.get_width() / 2),

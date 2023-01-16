@@ -1,3 +1,4 @@
+from sys import exit
 import pygame
 
 from script.buttons import Button
@@ -10,10 +11,13 @@ def lvl_selection(screen: pygame.display, bubbles: list, ai_player: AI_Player) -
         for string in str(file.read()).split('\n'):
             if string.split(':')[0] == 'save':
                 level = int(string.split(':')[1])
+    c_blocked = (23, 40, 143)
     buttons = [Button('Назад', (45, 170, 201), (226, 149, 61), 30, 30, 200, 100),
                Button('1 уровень', (45, 170, 201), (226, 149, 61), 450, 700, 300, 100),
-               Button('2 уровень', (45, 170, 201), (226, 149, 61), 850, 700, 300, 100),
-               Button('3 уровень', (45, 170, 201), (226, 149, 61), 1250, 700, 300, 100)]
+               Button('2 уровень', (45, 170, 201) if level >= 2 else c_blocked, (226, 149, 61)
+               if level >= 2 else c_blocked, 850, 700, 300, 100),
+               Button('3 уровень', (45, 170, 201) if level >= 3 else c_blocked, (226, 149, 61)
+               if level >= 2 else c_blocked, 1250, 700, 300, 100)]
     image_bg = pygame.transform.scale(pygame.image.load('src/backgrounds/menu_bg.png'), SIZE)
     image_level1 = pygame.transform.scale(pygame.image.load('src/backgrounds/level1_preview.png'), (300, 300))
     image_level2 = (pygame.transform.scale(pygame.image.load('src/backgrounds/level2_preview.png'), (300, 300))

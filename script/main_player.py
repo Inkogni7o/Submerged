@@ -13,6 +13,7 @@ class MainPlayer(pygame.sprite.Sprite):
         super(MainPlayer, self).__init__()
         self.BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.sprite_dir = f'src/player/'
+        self.cut_sheet(pygame.image.load('src/player/torpedo/animation.png'), 8, 2)
         self.lives = 3
         self.right = True
         self.move = False
@@ -24,7 +25,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 7
+        self.speed = 20
         self.torpedo_group = pygame.sprite.Group()
         self.bubbles_timer = 4
         self.bubbles = list()
@@ -84,6 +85,34 @@ class MainPlayer(pygame.sprite.Sprite):
                                            self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
+    def get_damage(self):
+        if self.lives > 0:
+            self.lives -= 1
+        else:
+            self.die()
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.frames = []
+        self.cur_frame = 0
+        self.cur_sprite = 0
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(92, 92)
+
+    def die(self):
+        self.cur_sprite += 1
+        if self.cur_sprite % 3 == 0:
+            self.image = self.frames[self.cur_sprite // 3]
+        if self.cur_sprite >= 45:
+            self.cur_sprite = 0
+            self.kill()
+
     def update_torpedo(self, player, *groups):
         self.torpedo_group.draw(self.screen)
         self.torpedo_group.update(player, groups)
@@ -102,6 +131,7 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.image_player, True, False)
             else:
                 self.image = self.image_player
+        # self.get_damage()
 
 
 class Torpedo(pygame.sprite.Sprite):

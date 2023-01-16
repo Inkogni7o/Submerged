@@ -16,6 +16,20 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.rect.move(-dx, 0)
 
 
+class DeathWall(pygame.sprite.Sprite):
+    def __init__(self, cell, up: bool):
+        super(DeathWall, self).__init__()
+        self.image = pygame.image.load('src/textures/stalactit.png') \
+            if not up else pygame.image.load('src/textures/stalagmite.png')
+        self.image.set_colorkey((0, 0, 0))
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = cell.x, cell.y
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self, dx) -> None:
+        self.rect = self.rect.move(-dx, 0)
+
+
 class Bubble:
     color = [255, 255, 255]
     speed = 0.5
