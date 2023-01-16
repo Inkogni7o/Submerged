@@ -10,10 +10,12 @@ from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall, Bubble
 from script.scenes import scene
+from script.text import Text
 from script.enemies import Cuttlefish
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_pos: tuple):
+    text = Text('Хьюстон, я спускаюсь', False)
     player = MainPlayer(screen, *player_pos)
     player_group = pygame.sprite.Group()
     player_group.add(player)
@@ -47,6 +49,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             if level == 1:
                 if shift > 7900:
                     result = scene(2, screen, player, player_group)
+                    text.draw(screen)
                     pygame.display.flip()
                     if result:
                         # завершение уровня

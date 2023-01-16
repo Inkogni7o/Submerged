@@ -5,20 +5,20 @@ import pygame
 
 from script.config import SIZE
 from script.environment import Bubble
-from script.main_player import MainPlayer
 from script.text import Text
 
 
 def scene(num_scene: int, screen: pygame.display, player, player_group):
     if num_scene == 1:
         image = pygame.transform.scale(pygame.image.load('src/backgrounds/scene_1_1_bg.png'), SIZE)
-        text = Text('Начался потоп')
+        text = Text('Начался потоп', True)
         now_text = 1
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if now_text == 1:
                         if not text.end:
