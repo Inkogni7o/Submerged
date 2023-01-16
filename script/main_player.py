@@ -4,7 +4,7 @@ import pygame.sprite
 import os
 import pygame
 
-from script.config import get_monitor_size
+from script.config import SIZE
 from script.environment import Bubble
 
 
@@ -13,21 +13,23 @@ class MainPlayer(pygame.sprite.Sprite):
         super(MainPlayer, self).__init__()
         self.BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.sprite_dir = f'src/player/'
+        self.cut_sheet(pygame.image.load('src/player/torpedo/animation.png'), 8, 2)
+        self.lives = 3
         self.right = True
         self.move = False
         self.move_map = False
         self.deley = 0
         self.screen = screen
         self.image_player = \
-            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (150, 100))
+            pygame.transform.scale(pygame.image.load(f'{self.sprite_dir}player1.png').convert_alpha(), (150, 85))
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 8
-        self.cur_sprite = 0
+        self.speed = 7
         self.torpedo_group = pygame.sprite.Group()
-        self.rect.x = 100
-        self.rect.y = 100
+        self.bubbles_timer = 4
+        self.bubbles = list()
+        self.rect.x, self.rect.y = x, y
 
     def update_pos(self, keys, *groups):
         self.collision = False
@@ -41,7 +43,7 @@ class MainPlayer(pygame.sprite.Sprite):
             new_main_player_rect.x += (keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) * self.speed * 2
             new_main_player_rect.y += (keys[pygame.K_DOWN] - keys[pygame.K_UP]) * (self.speed - 2)
             self.rect = new_main_player_rect
-            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= get_monitor_size()[0] // 2:
+            if 50 <= self.rect.x + min([i[0] for i in self.mask.outline()]) * 1.5 <= SIZE[0] // 2 - self.rect.width:
                 self.move_map = False
             else:
                 self.move_map = True
@@ -53,10 +55,12 @@ class MainPlayer(pygame.sprite.Sprite):
 
             for group in groups:
                 for sprite in group:
-                    if pygame.sprite.collide_mask(self, sprite):
-                        self.rect = old_main_player_rect
-                        self.collision = True
-                        break
+                    if 0 <= sprite.rect.x <= SIZE[0] // 2:
+                        # проверка на маску
+                        if pygame.sprite.collide_mask(self, sprite):
+                            self.rect = old_main_player_rect
+                            self.collision = True
+                            break
                 if self.collision:
                     break
             else:
@@ -68,6 +72,12 @@ class MainPlayer(pygame.sprite.Sprite):
                         self.right = True if not keys[pygame.K_LEFT] else False
                 else:
                     self.rect = old_main_player_rect
+                    for bubble in self.bubbles:
+                        bubble.draw(self.screen)
+                        bubble.update()
+                        if bubble.death is not None:
+                            if bubble.death == 0 or bubble.position[0] < 0:
+                                self.bubbles.pop(self.bubbles.index(bubble))
 
     def start_torpedo(self):
         if self.deley <= 0:
@@ -75,16 +85,44 @@ class MainPlayer(pygame.sprite.Sprite):
                                            self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
-    def update_torpedo(self, *groups):
+    def get_damage(self):
+        if self.lives > 0:
+            self.lives -= 1
+        else:
+            self.die()
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.frames = []
+        self.cur_frame = 0
+        self.cur_sprite = 0
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(92, 92)
+
+    def die(self):
+        self.cur_sprite += 1
+        if self.cur_sprite % 3 == 0:
+            self.image = self.frames[self.cur_sprite // 3]
+        if self.cur_sprite >= 45:
+            self.cur_sprite = 0
+            self.kill()
+
+
+    def update_torpedo(self, player, *groups):
         self.torpedo_group.draw(self.screen)
-        self.torpedo_group.update(groups)
+        self.torpedo_group.update(player, groups)
 
     def get_pos(self):
         return (self.rect[0] + self.rect.width // 2, self.rect[1] + self.rect.height // 2)
 
     def update_spr(self):
         if self.move:
-            self.cur_sprite += 1
             if self.right:
                 self.image = pygame.transform.flip(self.image_player, True, False)
             else:
@@ -94,6 +132,7 @@ class MainPlayer(pygame.sprite.Sprite):
                 self.image = pygame.transform.flip(self.image_player, True, False)
             else:
                 self.image = self.image_player
+        self.get_damage()
 
 
 class Torpedo(pygame.sprite.Sprite):
@@ -128,34 +167,37 @@ class Torpedo(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
 
-    def die(self):
+    def die(self, player: MainPlayer):
         self.speed = 0
         self.cur_sprite += 1
+        if player.move_map:
+            self.rect.x = self.rect.x + player.speed if not player.right else self.rect.x - player.speed
         if self.cur_sprite % 3 == 0:
             self.image = self.frames[self.cur_sprite // 3]
         if self.cur_sprite >= 45:
             self.cur_sprite = 0
             self.kill()
 
-    def update(self, groups):
+    def update(self, player, groups):
         for group in groups:
             for sprite in group:
-                if pygame.sprite.collide_mask(self, sprite):
-                    self.die()
+                if 0 < sprite.rect.x < SIZE[0] // 2:
+                    if pygame.sprite.collide_mask(self, sprite):
+                        self.die(player)
         self.live -= 1
         if self.right:
             self.rect.x += self.speed
         else:
             self.rect.x -= self.speed
         if self.live <= 0:
-            self.die()
+            self.die(player)
 
 
 class AI_Player(MainPlayer):
     def __init__(self, screen, x, y):
         super(AI_Player, self).__init__(screen)
-        self.x, self.y = x, y
-        self.monitor_size = list(get_monitor_size())
+        self.rect.x, self.rect.y = x, y
+        self.monitor_size = list(SIZE)
         self.bubbles = list()
         self.timer = 4
 
@@ -164,26 +206,22 @@ class AI_Player(MainPlayer):
         self.rect.y += y
         self.timer -= 1
         if self.rect.x > self.monitor_size[0]:
-            self.rect.x = -400
-            self.rect.center = self.rect.center[0], random.randint(300, self.monitor_size[1] - 300)
+            self.rect.center = -300, random.randint(300, self.monitor_size[1] - 300)
 
     def draw(self):
         for bubble in self.bubbles:
             bubble.draw(self.screen)
             bubble.update()
             if bubble.death is not None:
-                if bubble.death == 0:
+                if bubble.death == 0 or bubble.position[0] < 0:
                     self.bubbles.pop(self.bubbles.index(bubble))
         if not self.right:
-            self.screen.blit(self.image, self.get_pos())
+            self.screen.blit(self.image, (self.rect.x, self.rect.y))
         else:
-            self.screen.blit(pygame.transform.flip(self.image, True, False), self.get_pos())
+            self.screen.blit(pygame.transform.flip(self.image, True, False), (self.rect.x, self.rect.y))
         if self.timer == 0:
-            for _ in range(2):
-                self.bubbles.append(Bubble(self.monitor_size,
-                                           [self.rect.center[0] + random.randint(95, 100),
-                                            self.rect.center[1] + random.randint(80, 120)], True))
-                self.bubbles.append(Bubble(self.monitor_size,
-                                           [self.rect.center[0] + random.randint(95, 100),
-                                            self.rect.center[1] + random.randint(80, 120)], True))
+            for _ in range(4):
+                self.bubbles.append(Bubble(self.monitor_size, [random.randint(self.rect.x + 10, self.rect.x + 20),
+                                            random.randint(self.rect.y + 10, self.rect.y + self.rect.height - 10)],
+                                           True))
             self.timer = 4
