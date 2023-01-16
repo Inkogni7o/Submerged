@@ -25,6 +25,8 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     bullets_group = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     pause = False
+    death_image = pygame.transform.scale(pygame.image.load('src/backgrounds/death_bg.png'), (SIZE[0] - 500, SIZE[1]))
+    death_image.set_colorkey((247, 247, 247))
 
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
 
@@ -156,6 +158,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             breathing_bubble_group.draw(screen)
 
             player_group.draw(screen)
+
+            if player.lives <= 0:
+                screen.blit(death_image, (300, 0))
+                # TODO: сделать либо взрыв, либо выпуск большого количества пузырей в знак проигрыша
 
             # жизни героя
             for i in range(player.lives):

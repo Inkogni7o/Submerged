@@ -23,6 +23,8 @@ class Ammo(pygame.sprite.Sprite):
         if pygame.sprite.collide_mask(self, player):
             player.lives -= 1
             self.kill()
+            if player.lives == 0:
+                player.die()
             return True
         for group in groups:
             for sprite in group:
