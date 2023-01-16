@@ -58,3 +58,57 @@ class Bubble:
 
     def draw(self, screen):
         pygame.draw.circle(screen, pygame.Color('white'), self.position, 3, 1)
+
+
+class Breathing_bubble(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super(Breathing_bubble, self).__init__()
+        self.image= \
+            pygame.transform.scale(pygame.image.load(f'src/textures/Breathing_bubble.png').convert_alpha(), (60, 60))
+        self.rect = self.image.get_rect()
+        self.rect.x = x - 20
+        self.rect.y = y - 100
+        self.timer = 200
+        self.flag = True
+        self.move = True
+        self.global_timer = 800
+
+    def update(self):
+        self.global_timer -= 1
+        if self.global_timer == 0:
+            self.kill()
+        if self.move:
+            self.rect.y -= 0.4
+            self.timer -= 1  
+            if self.flag:
+                self.rect.x -= 1
+            else:
+                self.rect.x += 1
+            if self.timer <= 0:
+                self.flag = not(self.flag)
+                self.timer = 200
+
+    def touch(self):
+        self.kill()
+
+
+class Blower(pygame.sprite.Sprite):
+    def __init__(self, group, bubble_group, cell):
+        super(Blower, self).__init__(group)
+        self.image= \
+            pygame.transform.scale(pygame.image.load(f'src/textures/Blower.png').convert_alpha(), (100, 120))
+        self.image.set_colorkey((14, 209, 69))
+        self.rect = self.image.get_rect()
+        self.VAR = 300
+        self.timer = self.VAR
+        self.group = bubble_group
+        self.rect.x = cell.x
+        self.rect.y = cell.y
+
+    def update(self):
+        self.timer -= 0.5
+        if self.timer <= 0:
+            bubble = Breathing_bubble(self.rect[0] + self.rect.width // 2,
+                                           self.rect[1] + self.rect.height // 2)
+            self.group.add(bubble)
+            self.timer = self.VAR
