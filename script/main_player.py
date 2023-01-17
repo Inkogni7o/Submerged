@@ -30,8 +30,16 @@ class MainPlayer(pygame.sprite.Sprite):
         self.bubbles_timer = 4
         self.bubbles = list()
         self.rect.x, self.rect.y = x, y
+        self.air = 100
+
+    def sink(self):
+        self.air -= 0.2
+        if self.air <= 0:
+            pass
+
 
     def update_pos(self, keys, *groups):
+        self.sink()
         self.collision = False
         self.deley -= 1
         if (not keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]

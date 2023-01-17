@@ -132,3 +132,19 @@ class Yari(pygame.sprite.Sprite):
         group.add(bullet2)
 
         self.deley = 100
+
+
+class Boss():
+    def __init__(self, group, cell):
+        super(Boss, self).__init__(group)
+        self.image_player = \
+            pygame.transform.scale(pygame.image.load(f'src/enemies/boss.png').convert_alpha(), (300, 200))
+        self.rect = self.image.get_rect()
+        self.lives = 30
+
+
+    def update(self):
+    
+
+    def get_damage(self):
+        self.lives -= 1
