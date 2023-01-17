@@ -261,7 +261,7 @@ class Boss(pygame.sprite.Sprite):
         self.lives -= 1
 
     def die(self):
-        pass
+        self.kill()
 
 
 class Torpedo(pygame.sprite.Sprite):

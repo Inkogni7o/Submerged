@@ -38,7 +38,7 @@ class MainPlayer(pygame.sprite.Sprite):
     def sink(self):
         self.air -= 0.2
         if self.air <= 0:
-            pass
+            self.get_damage()
 
     def update_pos(self, keys, *groups):
         self.sink()
