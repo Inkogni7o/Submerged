@@ -102,7 +102,7 @@ class MainPlayer(pygame.sprite.Sprite):
         if self.deley <= 0:
             self.torpedo_group.add(Torpedo(self.right, self.rect[0] + self.rect.width // 2,
                                            self.rect[1] + self.rect.height // 2))
-            self.deley = 100
+            self.deley = 50
 
     def get_damage(self):
         if self.lives > 0:
