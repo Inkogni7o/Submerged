@@ -11,6 +11,7 @@ from script.pause import pause_screen
 from script.environment import Wall, Bubble, Blower, Breathing_bubble, DeathWall
 from script.scenes import scene
 from script.text import Text
+from script.enemies import Boss
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_pos: tuple):
