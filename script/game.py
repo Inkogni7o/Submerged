@@ -123,10 +123,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             player.update_pos(pygame.key.get_pressed(), walls_group, blower_group, death_wall_group)
 
-            if level == 2:
-                if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0]\
-                        // 2 - player.rect.width:
-                    player.move_map = False
+            #if level == 2:
+            #    if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0]\
+            #            // 2 - player.rect.width:
+            #        player.move_map = False
             if level == 3:
                 if 60 <= player.rect.x + min([i[0]
                                               for i in player.mask.outline()]) * 1.5 <= 300:
