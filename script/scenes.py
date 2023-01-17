@@ -11,7 +11,7 @@ from script.text import Text
 def scene(num_scene: int, screen: pygame.display, player, player_group):
     if num_scene == 1:
         image = pygame.transform.scale(pygame.image.load('src/backgrounds/scene_1_1_bg.png'), SIZE)
-        text = Text('Начался потоп', True)
+        text = Text('В один прекрасный момент все побережье Америки накрыли цунами', True)
         now_text = 1
         while True:
             for event in pygame.event.get():
@@ -24,7 +24,7 @@ def scene(num_scene: int, screen: pygame.display, player, player_group):
                         if not text.end:
                             text.end, text.string_index = True, len(text.text)
                         else:
-                            text.change_text('Новый текст')
+                            text.change_text('Вам нужно определить причину и по возможности устранить')
                             now_text = 2
                     elif now_text == 2:
                         if not text.end:
@@ -119,3 +119,6 @@ def scene(num_scene: int, screen: pygame.display, player, player_group):
                                                      player.rect.y + player.rect.height - 10)], True))
             player.bubbles_timer = 4
         return False
+
+    if num_scene == 4:
+        screen.blit()

@@ -38,16 +38,13 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     death_wall_group = pygame.sprite.Group()
     enemies_group = pygame.sprite.Group()
 
-    if level == 2:
-        if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0] // 2 - player.rect.width:
-            player.move_map = False
-
     if level == 3:
         boss = Boss(screen, 1200, 300)
         boss_group = pygame.sprite.Group()
         boss_group.add(boss)
         boss_bullet_group = pygame.sprite.Group()
-        if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0] // 2 - player.rect.width:
+        if 60 <= player.rect.x + min([i[0]
+                                      for i in player.mask.outline()]) * 1.5 <= 500:
             player.move_map = False
 
     for layer in game_map.visible_layers:
@@ -109,6 +106,11 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                         return 'level3'
                     continue
 
+            if level == 3:
+                if boss.lives == 0:
+                    scene(4, screen, player, player_group)
+                    continue
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -120,6 +122,15 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                         player.start_torpedo()
 
             player.update_pos(pygame.key.get_pressed(), walls_group, blower_group, death_wall_group)
+
+            if level == 2:
+                if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0]\
+                        // 2 - player.rect.width:
+                    player.move_map = False
+            if level == 3:
+                if 60 <= player.rect.x + min([i[0]
+                                              for i in player.mask.outline()]) * 1.5 <= 300:
+                    player.move_map = False
 
             if player.move_map and not player.collision:
                 move = (pygame.key.get_pressed()[pygame.K_RIGHT]
