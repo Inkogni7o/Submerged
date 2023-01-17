@@ -19,7 +19,7 @@ class Ammo(pygame.sprite.Sprite):
     def update(self, dx):
         self.rect = self.rect.move(-dx, 0)
 
-    def update_pos(self, player, *groups):
+    def update_pos(self, player, group, *groups):
         if pygame.sprite.collide_mask(self, player):
             player.lives -= 1
             self.kill()
@@ -167,7 +167,7 @@ class Boss(pygame.sprite.Sprite):
                 False)
         self.rect = self.image.get_rect()
         self.image.set_colorkey((14, 209, 69))
-        self.lives = 30
+        self.lives = 3
         self.delay1 = 100
         self.rect.x = pos_x
         self.rect.y = pos_y
@@ -315,7 +315,13 @@ class Torpedo(pygame.sprite.Sprite):
     def update(self, dx):
         self.rect = self.rect.move(-dx)
 
-    def update_pos(self, player, *groups):
+    def update_pos(self, player, group, *groups):
+        if pygame.sprite.collide_mask(self, player):
+            player.lives -= 1
+            self.kill()
+            if player.lives == 0:
+                player.die()
+            return True
         self.live -= 1
         if self.right:
             self.rect.x += self.speed
@@ -343,7 +349,7 @@ class Laser(pygame.sprite.Sprite):
         self.live = 60
         self.screen = screen
 
-    def die(self):
+    def die(self, player):
         self.delay -= 1
         x = self.rect[0] + self.rect.width // 2 + self.delay
         y = 0
@@ -356,17 +362,20 @@ class Laser(pygame.sprite.Sprite):
         y4 = self.delay * 2
         pygame.draw.rect(self.screen, (255, 0, 0), (x, y, x1, y1))
         pygame.draw.rect(self.screen, (255, 0, 0), (x3, y3, x4, y4))
+        if player.rect.colliderect(pygame.rect.Rect(x, y, x1, y1)) \
+            or player.rect.colliderect(pygame.rect.Rect(x3, y3, x4, y4)):
+                player.lives -= 1
         if self.delay < 0:
             self.kill()
 
-    def update(self):
+    def update_pos(self, player, group, *groups):
         self.live -= 1
         if self.live > 0:
             self.speedy += self.f
             self.rect.x += self.speedx
             self.rect.y += self.speedy
         elif self.live < 0:
-            self.die()
+            self.die(player)
 
 
 class Smart_Ammo(pygame.sprite.Sprite):
@@ -382,7 +391,7 @@ class Smart_Ammo(pygame.sprite.Sprite):
         self.speedy = speedy
         self.f = f
 
-    def update(self, *args, **kwargs):
+    def update_pos(self, player, *groups):
         self.timer -= 1
         self.speedy += self.f
         self.rect.x += self.speedx

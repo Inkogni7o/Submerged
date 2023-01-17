@@ -38,11 +38,17 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     death_wall_group = pygame.sprite.Group()
     enemies_group = pygame.sprite.Group()
 
+    if level == 2:
+        if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0] // 2 - player.rect.width:
+            player.move_map = False
+
     if level == 3:
         boss = Boss(screen, 1200, 300)
         boss_group = pygame.sprite.Group()
         boss_group.add(boss)
         boss_bullet_group = pygame.sprite.Group()
+        if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0] // 2 - player.rect.width:
+            player.move_map = False
 
     for layer in game_map.visible_layers:
         try:
@@ -93,6 +99,14 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     if result:
                         # завершение уровня
                         return 'level2'
+                    continue
+
+            if level == 2:
+                if shift > 4600:
+                    result = scene(3, screen, player, player_group)
+                    pygame.display.flip()
+                    if result:
+                        return 'level3'
                     continue
 
             for event in pygame.event.get():
@@ -151,7 +165,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 boss_group.update(boss_bullet_group, player.get_pos())
                 boss_group.draw(screen)
                 for sprite in boss_bullet_group:
-                    sprite.update_pos(boss_bullet_group)
+                    sprite.update_pos(player, boss_bullet_group)
                 boss_bullet_group.draw(screen)
 
             for sprite in bullets_group:
@@ -168,7 +182,6 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             for sprite in blower_group:
                 sprite.update_timer()
             blower_group.draw(screen)
-            print(blower_group)
 
             for sprite in breathing_bubble_group:
                 sprite.update_pos()

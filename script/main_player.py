@@ -25,7 +25,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 20
+        self.speed = 50
         self.torpedo_group = pygame.sprite.Group()
         self.bubbles_timer = 4
         self.bubbles = list()
@@ -39,7 +39,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.air -= 0.2
         if self.air <= 0:
             pass
-
 
     def update_pos(self, keys, *groups):
         self.sink()
