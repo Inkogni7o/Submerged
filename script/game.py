@@ -40,7 +40,9 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
     if level == 3:
         boss = Boss(screen, 1200, 300)
-        enemies_group.add(boss)
+        boss_group = pygame.sprite.Group()
+        boss_group.add(boss)
+        boss_bullet_group = pygame.sprite.Group()
 
     for layer in game_map.visible_layers:
         try:
@@ -145,6 +147,13 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                                                          player.rect.y + player.rect.height - 10)], True))
                 player.bubbles_timer = 4
 
+            if level == 3:
+                boss_group.update(boss_bullet_group, player.get_pos())
+                boss_group.draw(screen)
+                for sprite in boss_bullet_group:
+                    sprite.update_pos(boss_bullet_group)
+                boss_bullet_group.draw(screen)
+
             for sprite in bullets_group:
                 sprite.update_pos(player, walls_group, blower_group)
             bullets_group.draw(screen)
@@ -159,6 +168,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             for sprite in blower_group:
                 sprite.update_timer()
             blower_group.draw(screen)
+            print(blower_group)
 
             for sprite in breathing_bubble_group:
                 sprite.update_pos()

@@ -312,7 +312,10 @@ class Torpedo(pygame.sprite.Sprite):
                 self.group.add(Ammo(2, 2, x, y))
             self.kill()
 
-    def update(self):
+    def update(self, dx):
+        self.rect = self.rect.move(-dx)
+
+    def update_pos(self, player, *groups):
         self.live -= 1
         if self.right:
             self.rect.x += self.speed

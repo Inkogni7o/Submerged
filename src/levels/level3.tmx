@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="100" height="36" tilewidth="30" tileheight="30" infinite="0" nextlayerid="3" nextobjectid="258">
- <tileset firstgid="1" source="wall_textures.tsx"/>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="left-up" width="100" height="36" tilewidth="30" tileheight="30" infinite="0" nextlayerid="4" nextobjectid="259">
+ <tileset firstgid="1" source="../textures/wall_textures.tsx"/>
  <layer id="1" name="background" width="100" height="36">
   <data encoding="csv">
 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -278,6 +278,8 @@
   <object id="254" gid="2" x="60" y="900" width="32" height="32"/>
   <object id="255" gid="2" x="60" y="960" width="32" height="32"/>
   <object id="256" gid="2" x="60" y="990" width="32" height="32"/>
-  <object id="257" gid="9" x="990" y="990" width="77" height="89"/>
+ </objectgroup>
+ <objectgroup id="3" name="blower">
+  <object id="258" gid="9" x="900" y="990" width="77" height="89"/>
  </objectgroup>
 </map>

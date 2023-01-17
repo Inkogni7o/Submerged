@@ -43,7 +43,7 @@ def lvl_selection(screen: pygame.display, bubbles: list, ai_player: AI_Player) -
                         if button.text_btn == '2 уровень' and level >= 2:
                             return 'level2'
                         if button.text_btn == '3 уровень' and level >= 3:
-                            pass
+                            return 'level3'
 
         for bubble in bubbles:
             bubble.draw(screen)
