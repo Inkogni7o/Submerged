@@ -16,7 +16,7 @@ from script.enemies import Boss
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_pos: tuple):
-    text = Text('Хьюстон, я спускаюсь', False)
+    text = Text('База, нашел место усиления сигнала, снижаюсь', False)
     player = MainPlayer(screen, *player_pos)
     player_group = pygame.sprite.Group()
     player_group.add(player)
@@ -123,25 +123,23 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             player.update_pos(pygame.key.get_pressed(), walls_group, blower_group, death_wall_group)
 
-            #if level == 2:
-            #    if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0]\
-            #            // 2 - player.rect.width:
-            #        player.move_map = False
             if level == 3:
                 if 60 <= player.rect.x + min([i[0]
                                               for i in player.mask.outline()]) * 1.5 <= 300:
                     player.move_map = False
 
             if player.move_map and not player.collision:
-                move = (pygame.key.get_pressed()[pygame.K_RIGHT]
-                        - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
-                shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
-                    pygame.K_LEFT]) * player.speed
-                walls_group.update(move)
-                blower_group.update(move)
-                breathing_bubble_group.update(move)
-                enemies_group.update(move)
-                bullets_group.update(move)
+                if level != 3:
+                    move = (pygame.key.get_pressed()[pygame.K_RIGHT]
+                            - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
+                    shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
+                        pygame.K_LEFT]) * player.speed
+                    walls_group.update(move)
+                    blower_group.update(move)
+                    breathing_bubble_group.update(move)
+                    enemies_group.update(move)
+                    bullets_group.update(move)
+                    death_wall_group.update(move)
 
             player.update_spr()
             player.update_torpedo(player, enemies_group, walls_group, blower_group)

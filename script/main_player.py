@@ -25,7 +25,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 50
+        self.speed = 10
         self.torpedo_group = pygame.sprite.Group()
         self.bubbles_timer = 4
         self.bubbles = list()
@@ -80,6 +80,14 @@ class MainPlayer(pygame.sprite.Sprite):
                             break
                 if self.collision:
                     break
+                if self.move_map:
+                    if self.move:
+                        for bubble in self.bubbles:
+                            bubble.draw(self.screen)
+                            bubble.update()
+                            if bubble.death is not None:
+                                if bubble.death == 0 or bubble.position[0] < 0:
+                                    self.bubbles.pop(self.bubbles.index(bubble))
             else:
                 if not self.move_map:
                     self.rect = new_main_player_rect
@@ -89,12 +97,6 @@ class MainPlayer(pygame.sprite.Sprite):
                         self.right = True if not keys[pygame.K_LEFT] else False
                 else:
                     self.rect = old_main_player_rect
-                    for bubble in self.bubbles:
-                        bubble.draw(self.screen)
-                        bubble.update()
-                        if bubble.death is not None:
-                            if bubble.death == 0 or bubble.position[0] < 0:
-                                self.bubbles.pop(self.bubbles.index(bubble))
 
     def start_torpedo(self):
         if self.deley <= 0:

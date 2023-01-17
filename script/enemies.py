@@ -167,7 +167,7 @@ class Boss(pygame.sprite.Sprite):
                 False)
         self.rect = self.image.get_rect()
         self.image.set_colorkey((14, 209, 69))
-        self.lives = 3
+        self.lives = 30
         self.delay1 = 100
         self.rect.x = pos_x
         self.rect.y = pos_y
