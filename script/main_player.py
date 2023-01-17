@@ -5,7 +5,7 @@ import os
 import pygame
 
 from script.config import SIZE
-from script.environment import Bubble
+from script.environment import Bubble, DeathWall
 
 
 class MainPlayer(pygame.sprite.Sprite):
@@ -70,6 +70,13 @@ class MainPlayer(pygame.sprite.Sprite):
                         if pygame.sprite.collide_mask(self, sprite):
                             self.rect = old_main_player_rect
                             self.collision = True
+                            if (type(sprite)) is DeathWall:
+                                self.lives -= 1
+                                self.rect = self.rect.move((keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) *
+                                                           self.speed * -2,
+                                                           (keys[pygame.K_DOWN] - keys[pygame.K_UP])
+                                                           * (self.speed - 2) * -1)
+                                return
                             break
                 if self.collision:
                     break

@@ -177,7 +177,11 @@ class Boss(pygame.sprite.Sprite):
         self.delay5 = 300
         self.screen = screen
 
-    def update(self, group, player_position):
+    def update(self, group, player_position, hero_torpedo_group):
+        for torpedo in hero_torpedo_group:
+            if pygame.sprite.collide_mask(self, torpedo):
+                torpedo.kill()
+                self.get_damage()
         if self.lives > 20:
             self.first_stage(group, player_position)
         elif 20 > self.lives > 10:
@@ -200,9 +204,11 @@ class Boss(pygame.sprite.Sprite):
         y1 = self.rect[1] + self.rect.height // 2
         y2 = player_position[1] - 65
         if y2 > y1:
-            self.rect.y += 1
+            if 300 < y1 < SIZE[1] - 300:
+                self.rect.y += 1
         else:
-            self.rect.y -= 1
+            if 300 < y1 < SIZE[1] - 300:
+                self.rect.y -= 1
 
     def second_stage(self, group, player_position):
         self.first_stage(group, player_position, flag=True, delay=0.8)

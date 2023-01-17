@@ -119,7 +119,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group)
+            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group, death_wall_group)
 
             if player.move_map and not player.collision:
                 move = (pygame.key.get_pressed()[pygame.K_RIGHT]
@@ -127,7 +127,6 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
                     pygame.K_LEFT]) * player.speed
                 walls_group.update(move)
-                death_wall_group.update(move)
                 blower_group.update(move)
                 breathing_bubble_group.update(move)
                 enemies_group.update(move)
@@ -162,7 +161,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 player.bubbles_timer = 4
 
             if level == 3:
-                boss_group.update(boss_bullet_group, player.get_pos())
+                boss_group.update(boss_bullet_group, player.get_pos(), player.torpedo_group)
                 boss_group.draw(screen)
                 for sprite in boss_bullet_group:
                     sprite.update_pos(player, boss_bullet_group)
