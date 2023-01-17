@@ -30,7 +30,10 @@ class MainPlayer(pygame.sprite.Sprite):
         self.bubbles_timer = 4
         self.bubbles = list()
         self.rect.x, self.rect.y = x, y
-        self.air = 100
+        self.air = 400
+
+    def get_air(self):
+        self.air += 100
 
     def sink(self):
         self.air -= 0.2
@@ -89,7 +92,7 @@ class MainPlayer(pygame.sprite.Sprite):
 
     def start_torpedo(self):
         if self.deley <= 0:
-            self.torpedo_group.add(Torpedo(self.sprite_dir, self.right, self.rect[0] + self.rect.width // 2,
+            self.torpedo_group.add(Torpedo(self.right, self.rect[0] + self.rect.width // 2,
                                            self.rect[1] + self.rect.height // 2))
             self.deley = 100
 
@@ -144,7 +147,7 @@ class MainPlayer(pygame.sprite.Sprite):
 
 
 class Torpedo(pygame.sprite.Sprite):
-    def __init__(self, dir, right, x, y):
+    def __init__(self, right, x, y):
         super(Torpedo, self).__init__()
         self.dir = f'src/player/torpedo/'
         self.right = right
