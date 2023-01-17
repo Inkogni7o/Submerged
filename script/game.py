@@ -103,7 +103,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             if player.move_map and not player.collision:
                 move = (pygame.key.get_pressed()[pygame.K_RIGHT]
-                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
+                        - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
                     pygame.K_LEFT]) * player.speed
                 walls_group.update(move)
@@ -175,7 +175,6 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     return 'lose_screen'
                 lose_image.set_alpha(alpha)
 
-
             # жизни героя
             for i in range(player.lives):
                 image = pygame.transform.scale(pygame.image.load('src/textures/life.png'),
@@ -226,5 +225,3 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
                     except TypeError:
                         pass
-
-
