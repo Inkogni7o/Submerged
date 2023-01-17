@@ -12,20 +12,20 @@ def lvl_selection(screen: pygame.display, bubbles: list, ai_player: AI_Player) -
             if string.split(':')[0] == 'save':
                 level = int(string.split(':')[1])
     c_blocked = (23, 40, 143)
-    buttons = [Button('Назад', (45, 170, 201), (226, 149, 61), 30, 30, 200, 100),
-               Button('1 уровень', (45, 170, 201), (226, 149, 61), 450, 700, 300, 100),
+    buttons = [Button('Назад', (45, 170, 201), (226, 149, 61), 30, 30, 250, 100),
+               Button('1 уровень', (45, 170, 201), (226, 149, 61), 400, 700, 375, 100),
                Button('2 уровень', (45, 170, 201) if level >= 2 else c_blocked, (226, 149, 61)
-               if level >= 2 else c_blocked, 850, 700, 300, 100),
+               if level >= 2 else c_blocked, 800, 700, 375, 100),
                Button('3 уровень', (45, 170, 201) if level >= 3 else c_blocked, (226, 149, 61)
-               if level >= 2 else c_blocked, 1250, 700, 300, 100)]
+               if level >= 3 else c_blocked, 1200, 700, 375, 100)]
     image_bg = pygame.transform.scale(pygame.image.load('src/backgrounds/menu_bg.png'), SIZE)
-    image_level1 = pygame.transform.scale(pygame.image.load('src/backgrounds/level1_preview.png'), (300, 300))
-    image_level2 = (pygame.transform.scale(pygame.image.load('src/backgrounds/level2_preview.png'), (300, 300))
+    image_level1 = pygame.transform.scale(pygame.image.load('src/backgrounds/level1_preview.png'), (375, 375))
+    image_level2 = (pygame.transform.scale(pygame.image.load('src/backgrounds/level2_preview.png'), (375, 375))
                     if level >= 2 else pygame.transform.scale(pygame.image.load('src/backgrounds/locked_preview.png'),
-                                                              (300, 300)))
-    image_level3 = (pygame.transform.scale(pygame.image.load('src/backgrounds/level3_preview.png'), (300, 300))
+                                                              (375, 375)))
+    image_level3 = (pygame.transform.scale(pygame.image.load('src/backgrounds/level3_preview.png'), (375, 375))
                     if level >= 3 else pygame.transform.scale(pygame.image.load('src/backgrounds/locked_preview.png'),
-                                                              (300, 300)))
+                                                              (375, 375)))
 
     while True:
         screen.blit(image_bg, (0, 0))
@@ -41,7 +41,7 @@ def lvl_selection(screen: pygame.display, bubbles: list, ai_player: AI_Player) -
                         if button.text_btn == '1 уровень':
                             return 'level1'
                         if button.text_btn == '2 уровень' and level >= 2:
-                            pass
+                            return 'level2'
                         if button.text_btn == '3 уровень' and level >= 3:
                             pass
 
@@ -53,7 +53,7 @@ def lvl_selection(screen: pygame.display, bubbles: list, ai_player: AI_Player) -
 
         for button in buttons:
             button.draw(screen, *pygame.mouse.get_pos())
-        screen.blit(image_level1, (450, 350))
-        screen.blit(image_level2, (850, 350))
-        screen.blit(image_level3, (1250, 350))
+        screen.blit(image_level1, (400, 300))
+        screen.blit(image_level2, (800, 300))
+        screen.blit(image_level3, (1200, 300))
         pygame.display.flip()

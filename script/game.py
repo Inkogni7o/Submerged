@@ -6,9 +6,10 @@ from sys import exit
 import pytmx
 
 from script.config import SIZE
+from script.enemies import Cuttlefish, Yari
 from script.main_player import MainPlayer
 from script.pause import pause_screen
-from script.environment import Wall, Bubble, Blower, Breathing_bubble, DeathWall
+from script.environment import Wall, Bubble, Blower, DeathWall
 from script.scenes import scene
 from script.text import Text
 from script.enemies import Boss
@@ -22,12 +23,21 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     blower_group = pygame.sprite.Group()
     breathing_bubble_group = pygame.sprite.Group()
     bullets_group = pygame.sprite.Group()
-    enemies = pygame.sprite.Group()
     pause = False
 
+    death_image = pygame.transform.scale(pygame.image.load('src/backgrounds/death_bg.png'), (SIZE[0] - 500, SIZE[1]))
+    death_image.set_colorkey((247, 247, 247))
+
+    alpha = 0
+    lose_image = pygame.transform.scale(pygame.image.load('src/backgrounds/lose_bg.png'), SIZE)
+    lose_image.set_alpha(alpha)
+
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
+
     walls_group = pygame.sprite.Group()
     death_wall_group = pygame.sprite.Group()
+    enemies_group = pygame.sprite.Group()
+
     for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':
@@ -42,6 +52,16 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 for cell in layer:
                     wall = DeathWall(cell, True)
                     death_wall_group.add(wall)
+            if layer.name == 'blower':
+                for cell in layer:
+                    Blower(blower_group, breathing_bubble_group, cell)
+            if layer.name == 'cuttlefish':
+                for cell in layer:
+                    Cuttlefish(enemies_group, cell)
+            if layer.name == 'yari':
+                for cell in layer:
+                    Yari(enemies_group, cell)
+
         except TypeError:
             pass
 
@@ -66,7 +86,7 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     pygame.display.flip()
                     if result:
                         # завершение уровня
-                        return True
+                        return 'level2'
                     continue
 
             for event in pygame.event.get():
@@ -79,18 +99,22 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key.get_pressed(), walls_group)
+            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group)
 
             if player.move_map and not player.collision:
+                move = (pygame.key.get_pressed()[pygame.K_RIGHT]
+                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
                     pygame.K_LEFT]) * player.speed
-                walls_group.update(
-                    (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
-                death_wall_group.update((pygame.key.get_pressed()[pygame.K_RIGHT]
-                                         - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed)
+                walls_group.update(move)
+                death_wall_group.update(move)
+                blower_group.update(move)
+                breathing_bubble_group.update(move)
+                enemies_group.update(move)
+                bullets_group.update(move)
 
             player.update_spr()
-            player.update_torpedo(player, walls_group)
+            player.update_torpedo(player, enemies_group, walls_group, blower_group)
 
             player.bubbles_timer -= 1
             for bubble in player.bubbles:
@@ -117,19 +141,40 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                                                          player.rect.y + player.rect.height - 10)], True))
                 player.bubbles_timer = 4
 
-            enemies.draw(screen)
-            enemies.update(bullets_group, player.get_pos())
-
+            for sprite in bullets_group:
+                sprite.update_pos(player, walls_group, blower_group)
             bullets_group.draw(screen)
-            bullets_group.update()
 
+            for sprite in enemies_group:
+                if 0 <= sprite.rect.x <= SIZE[0]:
+                    sprite.update_pos(bullets_group, player.get_pos())
+                    if sprite.lives <= 0:
+                        sprite.kill()
+            enemies_group.draw(screen)
+
+            for sprite in blower_group:
+                sprite.update_timer()
             blower_group.draw(screen)
-            blower_group.update()
 
+            for sprite in breathing_bubble_group:
+                sprite.update_pos()
+                if pygame.sprite.collide_mask(sprite, player):
+                    sprite.kill()
+                    player.air += 100
             breathing_bubble_group.draw(screen)
-            breathing_bubble_group.update()
 
             player_group.draw(screen)
+
+            if player.lives <= 0:
+                # TODO: сделать либо взрыв, либо выпуск большого количества пузырей в знак проигрыша
+                screen.blit(death_image, (300, 0))
+                screen.blit(lose_image, (0, 0))
+                if alpha < 255:
+                    alpha += 3
+                else:
+                    return 'lose_screen'
+                lose_image.set_alpha(alpha)
+
 
             # жизни героя
             for i in range(player.lives):
@@ -154,4 +199,32 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 pause = False
                 player.bubbles = list()
                 player.torpedo_group = pygame.sprite.Group()
+                game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
+                for layer in game_map.visible_layers:
+                    try:
+                        if layer.name == 'walls':
+                            for cell in layer:
+                                wall = Wall(cell, game_map.tilewidth, game_map.tileheight)
+                                walls_group.add(wall)
+                        if layer.name == 'death_walls_up':
+                            for cell in layer:
+                                wall = DeathWall(cell, False)
+                                death_wall_group.add(wall)
+                        if layer.name == 'death_walls_down':
+                            for cell in layer:
+                                wall = DeathWall(cell, True)
+                                death_wall_group.add(wall)
+                        if layer.name == 'blower':
+                            for cell in layer:
+                                Blower(blower_group, breathing_bubble_group, cell)
+                        if layer.name == 'cuttlefish':
+                            for cell in layer:
+                                Cuttlefish(enemies_group, cell)
+                        if layer.name == 'yari':
+                            for cell in layer:
+                                Yari(enemies_group, cell)
+
+                    except TypeError:
+                        pass
+
 

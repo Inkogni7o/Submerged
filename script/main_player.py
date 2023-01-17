@@ -124,12 +124,13 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
 
-    def update_torpedo(self, player, *groups):
+    def update_torpedo(self, player, enemies, *groups):
         self.torpedo_group.draw(self.screen)
-        self.torpedo_group.update(player, groups)
+        for torpedo in self.torpedo_group:
+            torpedo.update_pos(player, enemies, *groups)
 
     def get_pos(self):
-        return (self.rect[0] + self.rect.width // 2, self.rect[1] + self.rect.height // 2)
+        return self.rect[0] + self.rect.width // 2, self.rect[1] + self.rect.height // 2
 
     def update_spr(self):
         if self.move:
@@ -176,18 +177,12 @@ class Torpedo(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(92, 92)
 
-    def die(self, player: MainPlayer):
-        self.speed = 0
-        self.cur_sprite += 1
-        if player.move_map:
-            self.rect.x = self.rect.x + player.speed if not player.right else self.rect.x - player.speed
-        if self.cur_sprite % 3 == 0:
-            self.image = self.frames[self.cur_sprite // 3]
-        if self.cur_sprite >= 45:
-            self.cur_sprite = 0
-            self.kill()
-
-    def update(self, player, groups):
+    def update_pos(self, player, enemies, *groups):
+        for enemy in enemies:
+            if 0 < enemy.rect.x < SIZE[0]:
+                if pygame.sprite.collide_mask(self, enemy):
+                    enemy.get_damage()
+                    self.live = 0
         for group in groups:
             for sprite in group:
                 if 0 < sprite.rect.x < SIZE[0] // 2:
@@ -200,6 +195,17 @@ class Torpedo(pygame.sprite.Sprite):
             self.rect.x -= self.speed
         if self.live <= 0:
             self.die(player)
+
+    def die(self, player: MainPlayer):
+        self.speed = 0
+        self.cur_sprite += 1
+        if player.move_map and player.move:
+            self.rect.x = self.rect.x + player.speed if not player.right else self.rect.x - player.speed
+        if self.cur_sprite % 3 == 0:
+            self.image = self.frames[self.cur_sprite // 3]
+        if self.cur_sprite >= 45:
+            self.cur_sprite = 0
+            self.kill()
 
 
 class AI_Player(MainPlayer):
