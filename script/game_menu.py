@@ -24,7 +24,11 @@ def game_menu(screen: pygame.display, bubbles: list, ai_player: AI_Player) -> st
                         if button.text_btn == 'Назад':
                             return 'start'
                         if button.text_btn == 'Новая игра':
-                            # TODO: зайти в текстовый файл и удалить все записи о прогрессе
+                            with open('src/saves/main_save.txt', 'w') as file:
+                                file.close()
+                            with open('src/saves/main_save.txt', 'w') as file:
+                                file.write('save:1')
+
                             return 'level1'
                         if button.text_btn == 'Продолжить':
                             with open('src/saves/main_save.txt', 'r', encoding='utf-8') as file:

@@ -24,10 +24,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-2 из релизов:
-окройте [релизы](https://github.com/Inkogni7o/Submerged/releases) и выберите платформу windows или linux
-
-
 ## Управление
 * стрелочки - движение гг
 * пробел - атака

@@ -89,11 +89,16 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
             death_wall_group.draw(screen)
 
             if level == 1:
+
                 if shift > 7900:
                     result = scene(2, screen, player, player_group)
                     text.draw(screen)
                     pygame.display.flip()
                     if result:
+                        with open('src/saves/main_save.txt', 'w') as file:
+                            file.close()
+                        with open('src/saves/main_save.txt', 'w') as file:
+                            file.write('save:2')
                         # завершение уровня
                         return 'level2'
                     continue
@@ -103,6 +108,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     result = scene(3, screen, player, player_group)
                     pygame.display.flip()
                     if result:
+                        with open('src/saves/main_save.txt', 'w') as file:
+                            file.close()
+                        with open('src/saves/main_save.txt', 'w') as file:
+                            file.write('save:3')
                         return 'level3'
                     continue
 
