@@ -35,3 +35,5 @@ while True:
         now_screen = main_game(1, screen, clock, (100, 100))
     if now_screen == 'level2':
         now_screen = main_game(2, screen, clock, (100, 600))
+    if now_screen == 'level3':
+        now_screen = main_game(3, screen, clock, (100, 100))

@@ -5,7 +5,7 @@ import os
 import pygame
 
 from script.config import SIZE
-from script.environment import Bubble
+from script.environment import Bubble, DeathWall
 
 
 class MainPlayer(pygame.sprite.Sprite):
@@ -25,7 +25,7 @@ class MainPlayer(pygame.sprite.Sprite):
         self.image = self.image_player
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-        self.speed = 20
+        self.speed = 50
         self.torpedo_group = pygame.sprite.Group()
         self.bubbles_timer = 4
         self.bubbles = list()
@@ -39,7 +39,6 @@ class MainPlayer(pygame.sprite.Sprite):
         self.air -= 0.2
         if self.air <= 0:
             pass
-
 
     def update_pos(self, keys, *groups):
         self.sink()
@@ -71,6 +70,13 @@ class MainPlayer(pygame.sprite.Sprite):
                         if pygame.sprite.collide_mask(self, sprite):
                             self.rect = old_main_player_rect
                             self.collision = True
+                            if (type(sprite)) is DeathWall:
+                                self.lives -= 1
+                                self.rect = self.rect.move((keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) *
+                                                           self.speed * -2,
+                                                           (keys[pygame.K_DOWN] - keys[pygame.K_UP])
+                                                           * (self.speed - 2) * -1)
+                                return
                             break
                 if self.collision:
                     break

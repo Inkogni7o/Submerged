@@ -38,6 +38,15 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     death_wall_group = pygame.sprite.Group()
     enemies_group = pygame.sprite.Group()
 
+    if level == 3:
+        boss = Boss(screen, 1200, 300)
+        boss_group = pygame.sprite.Group()
+        boss_group.add(boss)
+        boss_bullet_group = pygame.sprite.Group()
+        if 60 <= player.rect.x + min([i[0]
+                                      for i in player.mask.outline()]) * 1.5 <= 500:
+            player.move_map = False
+
     for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':
@@ -89,6 +98,19 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                         return 'level2'
                     continue
 
+            if level == 2:
+                if shift > 4600:
+                    result = scene(3, screen, player, player_group)
+                    pygame.display.flip()
+                    if result:
+                        return 'level3'
+                    continue
+
+            if level == 3:
+                if boss.lives == 0:
+                    scene(4, screen, player, player_group)
+                    continue
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -99,15 +121,23 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                     if event.key == pygame.K_SPACE:
                         player.start_torpedo()
 
-            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group)
+            player.update_pos(pygame.key.get_pressed(), walls_group, blower_group, death_wall_group)
+
+            if level == 2:
+                if 60 <= player.rect.x + min([i[0] for i in player.mask.outline()]) * 1.5 <= SIZE[0]\
+                        // 2 - player.rect.width:
+                    player.move_map = False
+            if level == 3:
+                if 60 <= player.rect.x + min([i[0]
+                                              for i in player.mask.outline()]) * 1.5 <= 300:
+                    player.move_map = False
 
             if player.move_map and not player.collision:
                 move = (pygame.key.get_pressed()[pygame.K_RIGHT]
-                                               - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
+                        - pygame.key.get_pressed()[pygame.K_LEFT]) * player.speed
                 shift += (pygame.key.get_pressed()[pygame.K_RIGHT] - pygame.key.get_pressed()[
                     pygame.K_LEFT]) * player.speed
                 walls_group.update(move)
-                death_wall_group.update(move)
                 blower_group.update(move)
                 breathing_bubble_group.update(move)
                 enemies_group.update(move)
@@ -140,6 +170,13 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                                           random.randint(player.rect.y + 10,
                                                          player.rect.y + player.rect.height - 10)], True))
                 player.bubbles_timer = 4
+
+            if level == 3:
+                boss_group.update(boss_bullet_group, player.get_pos(), player.torpedo_group)
+                boss_group.draw(screen)
+                for sprite in boss_bullet_group:
+                    sprite.update_pos(player, boss_bullet_group)
+                boss_bullet_group.draw(screen)
 
             for sprite in bullets_group:
                 sprite.update_pos(player, walls_group, blower_group)
@@ -174,7 +211,6 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                 else:
                     return 'lose_screen'
                 lose_image.set_alpha(alpha)
-
 
             # жизни героя
             for i in range(player.lives):
@@ -226,5 +262,3 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
                     except TypeError:
                         pass
-
-

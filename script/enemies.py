@@ -19,7 +19,7 @@ class Ammo(pygame.sprite.Sprite):
     def update(self, dx):
         self.rect = self.rect.move(-dx, 0)
 
-    def update_pos(self, player, *groups):
+    def update_pos(self, player, group, *groups):
         if pygame.sprite.collide_mask(self, player):
             player.lives -= 1
             self.kill()
@@ -159,50 +159,56 @@ class Yari(pygame.sprite.Sprite):
 
 
 class Boss(pygame.sprite.Sprite):
-    def __init__(self, screen):
+    def __init__(self, screen, pos_x, pos_y):
         super(Boss, self).__init__()
         self.image = \
-            pygame.transform.flip(pygame.transform.scale(pygame.image.load(f'src/enemies/boss.png').convert_alpha(), (800, 500)), True, False)
+            pygame.transform.flip(
+                pygame.transform.scale(pygame.image.load(f'src/enemies/boss.png').convert_alpha(), (800, 500)), True,
+                False)
         self.rect = self.image.get_rect()
         self.image.set_colorkey((14, 209, 69))
-        self.lives = 30
+        self.lives = 3
         self.delay1 = 100
-        self.rect.x = 1200
-        self.rect.y = 200
+        self.rect.x = pos_x
+        self.rect.y = pos_y
         self.delay2 = 200
         self.delay3 = 100
         self.dalay4 = 4
         self.delay5 = 300
         self.screen = screen
 
-
-    def update(self, group, player_position):
+    def update(self, group, player_position, hero_torpedo_group):
+        for torpedo in hero_torpedo_group:
+            if pygame.sprite.collide_mask(self, torpedo):
+                torpedo.kill()
+                self.get_damage()
         if self.lives > 20:
             self.first_stage(group, player_position)
-        elif self.lives < 20 and self.lives > 10:
+        elif 20 > self.lives > 10:
             self.second_stage(group, player_position)
-        elif self.live == 0:
+        elif self.lives == 0:
             self.die()
         else:
             self.third_stage(group, player_position)
 
         pygame.draw.rect(self.screen, (255, 0, 0), (1300, 20, self.lives * 15, 25))
 
-
     def first_stage(self, group, player_position, flag=False, delay=1):
         self.delay1 -= delay
         if self.delay1 <= 0:
             group.add(Torpedo(False, self.rect[0] + self.rect.width // 2 - 220,
-                                           self.rect[1] + self.rect.height // 2 + 85, group, flag))
+                              self.rect[1] + self.rect.height // 2 + 85, group, flag))
             group.add(Torpedo(False, self.rect[0] + self.rect.width // 2 - 245,
-                                           self.rect[1] + self.rect.height // 2 + 45, group, False))
+                              self.rect[1] + self.rect.height // 2 + 45, group, False))
             self.delay1 = 100
         y1 = self.rect[1] + self.rect.height // 2
         y2 = player_position[1] - 65
         if y2 > y1:
-            self.rect.y += 1
+            if 300 < y1 < SIZE[1] - 300:
+                self.rect.y += 1
         else:
-            self.rect.y -= 1
+            if 300 < y1 < SIZE[1] - 300:
+                self.rect.y -= 1
 
     def second_stage(self, group, player_position):
         self.first_stage(group, player_position, flag=True, delay=0.8)
@@ -224,11 +230,11 @@ class Boss(pygame.sprite.Sprite):
                     y2 = self.rect[1] + self.rect.height // 2
                     if x2 >= x1:
                         z = x2 - 10
-                        z1  = x2 - 20
+                        z1 = x2 - 20
                         differencex = -10
                     else:
                         z = x2 + 10
-                        z1  = x2 + 20
+                        z1 = x2 + 20
                         differencex = 10
                     firtsy = (((z) - x1) / (x2 - x1)) * (y2 - y1) + y1
                     secondy = (((z1) - x1) / (x2 - x1)) * (y2 - y1) + y1
@@ -246,17 +252,17 @@ class Boss(pygame.sprite.Sprite):
         self.second_stage(group, player_position)
         self.delay5 -= 1
         if self.delay5 <= 0:
-            bullet = Laser(self.rect[0] + self.rect.width // 2 - 350, self.rect[1] + self.rect.height // 2 - 100, group, player_position, self.screen)
+            bullet = Laser(self.rect[0] + self.rect.width // 2 - 350, self.rect[1] + self.rect.height // 2 - 100, group,
+                           player_position, self.screen)
             group.add(bullet)
             self.delay5 = 300
-
 
     def get_damage(self):
         self.lives -= 1
 
-
     def die(self):
         pass
+
 
 class Torpedo(pygame.sprite.Sprite):
     def __init__(self, right, x, y, group, flag):
@@ -312,7 +318,16 @@ class Torpedo(pygame.sprite.Sprite):
                 self.group.add(Ammo(2, 2, x, y))
             self.kill()
 
-    def update(self):
+    def update(self, dx):
+        self.rect = self.rect.move(-dx)
+
+    def update_pos(self, player, group, *groups):
+        if pygame.sprite.collide_mask(self, player):
+            player.lives -= 1
+            self.kill()
+            if player.lives == 0:
+                player.die()
+            return True
         self.live -= 1
         if self.right:
             self.rect.x += self.speed
@@ -321,10 +336,11 @@ class Torpedo(pygame.sprite.Sprite):
         if self.live <= 0:
             self.die()
 
+
 class Laser(pygame.sprite.Sprite):
     def __init__(self, x, y, group, anem_pos, screen):
         super(Laser, self).__init__()
-     
+
         self.image = pygame.transform.scale(pygame.image.load(f'src/enemies/laser.png').convert_alpha(), (80, 80))
         self.rect = self.image.get_rect()
         self.masc = pygame.mask.from_surface(self.image)
@@ -332,15 +348,14 @@ class Laser(pygame.sprite.Sprite):
         self.speedy = -15
         self.f = 0.5
         self.delay = 20
-        self.rect.x = x 
+        self.rect.x = x
         self.rect.y = y
         self.x1 = anem_pos[0]
         self.y1 = anem_pos[1]
         self.live = 60
         self.screen = screen
 
-
-    def die(self):
+    def die(self, player):
         self.delay -= 1
         x = self.rect[0] + self.rect.width // 2 + self.delay
         y = 0
@@ -353,20 +368,20 @@ class Laser(pygame.sprite.Sprite):
         y4 = self.delay * 2
         pygame.draw.rect(self.screen, (255, 0, 0), (x, y, x1, y1))
         pygame.draw.rect(self.screen, (255, 0, 0), (x3, y3, x4, y4))
+        if player.rect.colliderect(pygame.rect.Rect(x, y, x1, y1)) \
+            or player.rect.colliderect(pygame.rect.Rect(x3, y3, x4, y4)):
+                player.lives -= 1
         if self.delay < 0:
             self.kill()
 
-
-
-
-    def update(self):
+    def update_pos(self, player, group, *groups):
         self.live -= 1
         if self.live > 0:
             self.speedy += self.f
             self.rect.x += self.speedx
             self.rect.y += self.speedy
         elif self.live < 0:
-            self.die()
+            self.die(player)
 
 
 class Smart_Ammo(pygame.sprite.Sprite):
@@ -382,7 +397,7 @@ class Smart_Ammo(pygame.sprite.Sprite):
         self.speedy = speedy
         self.f = f
 
-    def update(self, *args, **kwargs):
+    def update_pos(self, player, *groups):
         self.timer -= 1
         self.speedy += self.f
         self.rect.x += self.speedx

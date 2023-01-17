@@ -27,7 +27,11 @@ def game_menu(screen: pygame.display, bubbles: list, ai_player: AI_Player) -> st
                             # TODO: зайти в текстовый файл и удалить все записи о прогрессе
                             return 'level1'
                         if button.text_btn == 'Продолжить':
-                            return 'continue'
+                            with open('src/saves/main_save.txt', 'r', encoding='utf-8') as file:
+                                for string in str(file.read()).split('\n'):
+                                    if string.split(':')[0] == 'save':
+                                        level = int(string.split(':')[1])
+                            return f'level{level}'
                         if button.text_btn == 'Выбор уровня':
                             return 'select_lvl'
         for bubble in bubbles:
