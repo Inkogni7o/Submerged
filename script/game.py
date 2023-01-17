@@ -108,8 +108,9 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
 
             if level == 3:
                 if boss.lives == 0:
-                    scene(4, screen, player, player_group)
-                    continue
+                    result = scene(4, screen, player, player_group)
+                    if result:
+                        return 'game_menu'
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

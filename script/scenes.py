@@ -121,7 +121,7 @@ def scene(num_scene: int, screen: pygame.display, player, player_group):
         return False
 
     if num_scene == 4:
-        image = pygame.transform.scale(pygame.image.load('scene4.jpg'), SIZE)
+        image = pygame.transform.scale(pygame.image.load('src/backgrounds/scene4.jpg'), SIZE)
         text = Text('Что это или кто - не понятно. И зачем они это делали - не понятно.', True)
         now_text = 1
         while True:
@@ -141,7 +141,7 @@ def scene(num_scene: int, screen: pygame.display, player, player_group):
                         if not text.end:
                             text.end, text.string_index = True, len(text.text)
                         else:
-                            return
+                            return True
 
             screen.blit(image, (0, 0))
             text.draw(screen)
