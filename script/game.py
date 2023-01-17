@@ -38,6 +38,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     death_wall_group = pygame.sprite.Group()
     enemies_group = pygame.sprite.Group()
 
+    if level == 3:
+        boss = Boss(screen, 1200, 300)
+        enemies_group.add(boss)
+
     for layer in game_map.visible_layers:
         try:
             if layer.name == 'walls':

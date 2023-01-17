@@ -159,43 +159,43 @@ class Yari(pygame.sprite.Sprite):
 
 
 class Boss(pygame.sprite.Sprite):
-    def __init__(self, screen):
+    def __init__(self, screen, pos_x, pos_y):
         super(Boss, self).__init__()
         self.image = \
-            pygame.transform.flip(pygame.transform.scale(pygame.image.load(f'src/enemies/boss.png').convert_alpha(), (800, 500)), True, False)
+            pygame.transform.flip(
+                pygame.transform.scale(pygame.image.load(f'src/enemies/boss.png').convert_alpha(), (800, 500)), True,
+                False)
         self.rect = self.image.get_rect()
         self.image.set_colorkey((14, 209, 69))
         self.lives = 30
         self.delay1 = 100
-        self.rect.x = 1200
-        self.rect.y = 200
+        self.rect.x = pos_x
+        self.rect.y = pos_y
         self.delay2 = 200
         self.delay3 = 100
         self.dalay4 = 4
         self.delay5 = 300
         self.screen = screen
 
-
     def update(self, group, player_position):
         if self.lives > 20:
             self.first_stage(group, player_position)
-        elif self.lives < 20 and self.lives > 10:
+        elif 20 > self.lives > 10:
             self.second_stage(group, player_position)
-        elif self.live == 0:
+        elif self.lives == 0:
             self.die()
         else:
             self.third_stage(group, player_position)
 
         pygame.draw.rect(self.screen, (255, 0, 0), (1300, 20, self.lives * 15, 25))
 
-
     def first_stage(self, group, player_position, flag=False, delay=1):
         self.delay1 -= delay
         if self.delay1 <= 0:
             group.add(Torpedo(False, self.rect[0] + self.rect.width // 2 - 220,
-                                           self.rect[1] + self.rect.height // 2 + 85, group, flag))
+                              self.rect[1] + self.rect.height // 2 + 85, group, flag))
             group.add(Torpedo(False, self.rect[0] + self.rect.width // 2 - 245,
-                                           self.rect[1] + self.rect.height // 2 + 45, group, False))
+                              self.rect[1] + self.rect.height // 2 + 45, group, False))
             self.delay1 = 100
         y1 = self.rect[1] + self.rect.height // 2
         y2 = player_position[1] - 65
@@ -224,11 +224,11 @@ class Boss(pygame.sprite.Sprite):
                     y2 = self.rect[1] + self.rect.height // 2
                     if x2 >= x1:
                         z = x2 - 10
-                        z1  = x2 - 20
+                        z1 = x2 - 20
                         differencex = -10
                     else:
                         z = x2 + 10
-                        z1  = x2 + 20
+                        z1 = x2 + 20
                         differencex = 10
                     firtsy = (((z) - x1) / (x2 - x1)) * (y2 - y1) + y1
                     secondy = (((z1) - x1) / (x2 - x1)) * (y2 - y1) + y1
@@ -246,17 +246,17 @@ class Boss(pygame.sprite.Sprite):
         self.second_stage(group, player_position)
         self.delay5 -= 1
         if self.delay5 <= 0:
-            bullet = Laser(self.rect[0] + self.rect.width // 2 - 350, self.rect[1] + self.rect.height // 2 - 100, group, player_position, self.screen)
+            bullet = Laser(self.rect[0] + self.rect.width // 2 - 350, self.rect[1] + self.rect.height // 2 - 100, group,
+                           player_position, self.screen)
             group.add(bullet)
             self.delay5 = 300
-
 
     def get_damage(self):
         self.lives -= 1
 
-
     def die(self):
         pass
+
 
 class Torpedo(pygame.sprite.Sprite):
     def __init__(self, right, x, y, group, flag):
@@ -321,10 +321,11 @@ class Torpedo(pygame.sprite.Sprite):
         if self.live <= 0:
             self.die()
 
+
 class Laser(pygame.sprite.Sprite):
     def __init__(self, x, y, group, anem_pos, screen):
         super(Laser, self).__init__()
-     
+
         self.image = pygame.transform.scale(pygame.image.load(f'src/enemies/laser.png').convert_alpha(), (80, 80))
         self.rect = self.image.get_rect()
         self.masc = pygame.mask.from_surface(self.image)
@@ -332,13 +333,12 @@ class Laser(pygame.sprite.Sprite):
         self.speedy = -15
         self.f = 0.5
         self.delay = 20
-        self.rect.x = x 
+        self.rect.x = x
         self.rect.y = y
         self.x1 = anem_pos[0]
         self.y1 = anem_pos[1]
         self.live = 60
         self.screen = screen
-
 
     def die(self):
         self.delay -= 1
@@ -355,9 +355,6 @@ class Laser(pygame.sprite.Sprite):
         pygame.draw.rect(self.screen, (255, 0, 0), (x3, y3, x4, y4))
         if self.delay < 0:
             self.kill()
-
-
-
 
     def update(self):
         self.live -= 1
