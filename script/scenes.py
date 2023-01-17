@@ -121,4 +121,28 @@ def scene(num_scene: int, screen: pygame.display, player, player_group):
         return False
 
     if num_scene == 4:
-        screen.blit()
+        image = pygame.transform.scale(pygame.image.load('scene4.jpg'), SIZE)
+        text = Text('Что это или кто - не понятно. И зачем они это делали - не понятно.', True)
+        now_text = 1
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if now_text == 1:
+                        if not text.end:
+                            text.end, text.string_index = True, len(text.text)
+                        else:
+                            text.change_text('Это нам и предстоит узнать!')
+                            now_text = 2
+                    elif now_text == 2:
+                        if not text.end:
+                            text.end, text.string_index = True, len(text.text)
+                        else:
+                            return
+
+            screen.blit(image, (0, 0))
+            text.draw(screen)
+            pygame.display.flip()
