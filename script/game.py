@@ -10,7 +10,7 @@ from script.main_player import MainPlayer
 from script.pause import pause_screen
 from script.environment import Wall, Bubble, Blower, Breathing_bubble, DeathWall
 from script.scenes import scene
-from script.text import Text
+from script.text import Text, Boss
 
 
 def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_pos: tuple):
@@ -20,10 +20,10 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
     player_group.add(player)
     blower_group = pygame.sprite.Group()
     breathing_bubble_group = pygame.sprite.Group()
-    blower = Blower(blower_group, breathing_bubble_group)
-    blower_group.add()
     bullets_group = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
+    boss = Boss(screen)
+    enemies.add(boss)
     pause = False
 
     game_map = pytmx.load_pygame(f'src/levels/level{level}.tmx')
@@ -138,6 +138,8 @@ def main_game(level, screen: pygame.display, clock: pygame.time.Clock, player_po
                                                (70, 70))
                 image.set_colorkey((14, 209, 69))
                 screen.blit(image, (0 + 80 * i, 0))
+
+            pygame.draw.rect(screen, (0, 0, 139), (270, 20, player.air * 0.85, 25))
 
             pygame.display.flip()
             clock.tick(60)
