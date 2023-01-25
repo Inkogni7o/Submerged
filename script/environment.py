@@ -49,9 +49,9 @@ class Bubble:
             self.position = [self.position[0], self.monitor_size[1]]
 
     def update(self):
+        self.position[1] -= self.speed if self.death is None else self.speed + 1
         if self.death is not None:
             self.death -= 1
-        self.position[1] -= self.speed if self.death is None else self.speed + 1
         if self.position[1] < 0:
             if self.death is None:
                 self.generate_start_position(False)
@@ -113,6 +113,6 @@ class Blower(pygame.sprite.Sprite):
         self.timer -= 0.5
         if self.timer <= 0:
             bubble = Breathing_bubble(self.rect[0] + self.rect.width // 2,
-                                           self.rect[1] + self.rect.height // 2)
+                                      self.rect[1] + self.rect.height // 2)
             self.group.add(bubble)
             self.timer = self.VAR
