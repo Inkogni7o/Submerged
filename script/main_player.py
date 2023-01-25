@@ -76,15 +76,15 @@ class MainPlayer(pygame.sprite.Sprite):
                                                            self.speed * -10,
                                                            (keys[pygame.K_DOWN] - keys[pygame.K_UP])
                                                            * (self.speed - 2) * -10)
-                                return
                             break
                 if self.collision:
                     break
+                else:
+                    self.move = True
                 if self.move_map:
                     if self.move:
                         for bubble in self.bubbles:
                             bubble.draw(self.screen)
-                            bubble.update()
                             if bubble.death is not None:
                                 if bubble.death == 0 or bubble.position[0] < 0:
                                     self.bubbles.pop(self.bubbles.index(bubble))
