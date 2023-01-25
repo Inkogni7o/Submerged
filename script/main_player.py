@@ -73,9 +73,9 @@ class MainPlayer(pygame.sprite.Sprite):
                             if (type(sprite)) is DeathWall:
                                 self.lives -= 1
                                 self.rect = self.rect.move((keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]) *
-                                                           self.speed * -2,
+                                                           self.speed * -10,
                                                            (keys[pygame.K_DOWN] - keys[pygame.K_UP])
-                                                           * (self.speed - 2) * -1)
+                                                           * (self.speed - 2) * -10)
                                 return
                             break
                 if self.collision:
